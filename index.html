@@ -76,7 +76,6 @@ label.av{cursor:pointer}
 .pt .l{font:600 9px var(--sans);letter-spacing:.16em;color:var(--mut);margin-bottom:5px;text-transform:uppercase}
 .pt .t{font:800 15px/1.2 var(--sans);letter-spacing:-.045em}
 .pt .s{margin-top:4px;font:500 12px/1.35 var(--sans);color:var(--mut);letter-spacing:-.02em}
-.pt .s b{font:600 9px var(--sans);letter-spacing:.12em;margin-right:6px;color:var(--fg);text-transform:uppercase}
 
 /* sheet blocks */
 .blk{margin-bottom:14px}
@@ -178,7 +177,7 @@ const DEF=()=>({
  bands:{about:'ABOUT',chars:'',guide:'PAIR GUIDE'},
  ui:{pair:'PAIR',me:'ME'},
  about:[{k:'ACTIVE',v:'2025 ~'},{k:'LIKES',v:'chess, writing'},{k:'NOTE',v:'slow replies'}],
- pair:{code:'C33',title:"King's Gambit Accepted",subCode:'C39',sub:'Kieseritzky Gambit'},
+ pair:{code:'C33 — C39',title:"King's Gambit Accepted",sub:'Kieseritzky Gambit'},
  chars:[{name:'Kai',side:'WHITE',photo:''},{name:'Ray',side:'BLACK',photo:''}],
  spec:[{k:'AGE',v:['27','26']},{k:'HEIGHT',v:['184cm','178cm']},{k:'BIRTHDAY',v:['14.03','02.09']},{k:'RATING',v:['2712 GM','2604 IM']},{k:'LIKES',v:['whisky, rainy days','late snacks']}],
  guide:[
@@ -237,8 +236,8 @@ function titleBlock(){
  const P=S.pair,L=live();
  const part=(p,cls,tag,ph)=>L||P[p.split('.')[1]]?T(p,cls,tag,ph):'';
  const code=part('pair.code','l','div','CODE'),title=part('pair.title','t','div','Title');
- const sc=(L||P.subCode)?`<b>${T('pair.subCode','','span','CODE')}</b>`:'',sb=(L||P.sub)?T('pair.sub','','span','Subtitle'):'';
- return `${code}${title}${(sc||sb)?`<div class="s">${sc}${sb}</div>`:''}`}
+ const sb=(L||P.sub)?T('pair.sub','s','div','Subtitle'):'';
+ return `${code}${title}${sb}`}
 function pagePair(an){
  const a=i=>an?` a" style="--i:${i}`:'"';
  const c0=nm(0),c1=nm(1),auto=`${U(c0)} & ${U(c1)} · CHARACTERS`;
@@ -271,7 +270,9 @@ function flash(m,ms=2500){$('#ebm').textContent=m;clearTimeout(ft);ft=setTimeout
 /* ---- load / save ---- */
 const upgrade=d=>{
  const D0=DEF(),o={...D0,...d};
- o.pair={...D0.pair,...(d.pair||{})};o.dday={...D0.dday,...(d.dday||{})};o.bands={...D0.bands,...(d.bands||{})};o.ui={...D0.ui,...(d.ui||{})};
+ o.pair={...D0.pair,...(d.pair||{})};
+ if(o.pair.subCode){const sc=String(o.pair.subCode).trim(),cd=String(o.pair.code||'').trim();o.pair.code=cd?(cd.includes(sc)?cd:cd+' — '+sc):sc}
+ delete o.pair.subCode;o.dday={...D0.dday,...(d.dday||{})};o.bands={...D0.bands,...(d.bands||{})};o.ui={...D0.ui,...(d.ui||{})};
  o.chars=[0,1].map(i=>({...D0.chars[i],...((d.chars||[])[i]||{})}));
  if(!Array.isArray(o.guide)){ // older versions stored intro / tags / relation / notes
   const g=d.guide||{};o.guide=[{t:'Intro',b:g.intro||''},{t:'Relation',b:[(g.tags||[]).join(' / '),g.relation||''].filter(Boolean).join('\n\n')},{t:'Notes',b:(g.notes||[]).map(x=>'- '+x).join('\n')}]}

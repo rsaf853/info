@@ -193,7 +193,7 @@ const DEF=()=>({
  ui:{pair:'PAIR',me:'ME'},
  about:[{k:'ACTIVE',v:'2025 ~'},{k:'LIKES',v:'chess, writing'},{k:'NOTE',v:'slow replies'}],
  pair:{code:'C33 — C39',title:"King's Gambit Accepted",sub:'Kieseritzky Gambit'},
- chars:[{name:'Kai',side:'WHITE',photo:''},{name:'Ray',side:'BLACK',photo:''}],
+ chars:[{name:'Kai',hd:'Kai',photo:''},{name:'Ray',hd:'Ray',photo:''}],
  spec:[{k:'AGE',v:['27','26']},{k:'HEIGHT',v:['184cm','178cm']},{k:'BIRTHDAY',v:['14.03','02.09']},{k:'RATING',v:['2712 GM','2604 IM']},{k:'LIKES',v:['whisky, rainy days','late snacks']}],
  guide:[
   {t:'Intro',b:'They met over a chessboard and keep losing to each other.\n**Whoever wins keeps changing.**'},
@@ -263,7 +263,7 @@ function pagePair(an){
  const guide=S.guide.map((g,i)=>`<div class="rw"><span class="n">${i+1}.${mv('guide',i,S.guide.length)}</span><div class="c">${T(`guide.${i}.t`,'gh','h3','Title')}${MDF(`guide.${i}.b`,'gp')}</div></div>`).join('');
  return `<div class="W"><aside class="L pr${a(0)}"><div class="dg" role="img" aria-label="knight's jump diagram">${jumpSVG(ini(c0,'K'),ini(c1,'R'))}</div><div class="pt">${titleBlock()}</div></aside>
  <section class="Rt"><div class="blk rv${a(1)}" data-pin><div class="bd">${bandTxt('bands.chars',auto)}<span class="no"><span class="pin-mark">PINNED · </span>MOVE 3</span></div><div class="rws">
-  <div class="hd3"><span>#</span><span>${sq(0)}${esc(U(c0))} · ${T('chars.0.side','','span','SIDE')}</span><span>${sq(1)}${esc(U(c1))} · ${T('chars.1.side','','span','SIDE')}</span></div>
+  <div class="hd3"><span>#</span><span>${sq(0)}${T('chars.0.hd','','span','NAME')}</span><span>${sq(1)}${T('chars.1.hd','','span','NAME')}</span></div>
   <div class="rw r3"><span class="n">1.</span><div class="c pc">${photo('chars.0.photo',esc(S.chars[0].ph||'PHOTO'))}<div class="pn">${T('chars.0.name','')}</div>${live()?`<div class="phl"><span class="k">PHOTO TEXT</span>${T('chars.0.ph','v','div','PHOTO')}</div>`:''}</div><div class="c pc">${photo('chars.1.photo',esc(S.chars[1].ph||'PHOTO'))}<div class="pn">${T('chars.1.name','')}</div>${live()?`<div class="phl"><span class="k">PHOTO TEXT</span>${T('chars.1.ph','v','div','PHOTO')}</div>`:''}</div></div>
   <div class="drop"><div class="in">${spec}<button class="addb" data-a="addspec" style="margin:0 12px 10px;width:calc(100% - 24px)">+ ADD ROW</button></div></div></div></div>
  <div class="blk${a(2)}"><div class="bd">${bandTxt('bands.guide','PAIR GUIDE')}<span class="no">MOVE 4</span></div><div class="rws">${guide}</div><button class="addb" data-a="addguide">+ ADD SECTION</button></div></section>
@@ -291,7 +291,7 @@ const upgrade=d=>{
  o.pair={...D0.pair,...(d.pair||{})};
  if(o.pair.subCode){const sc=String(o.pair.subCode).trim(),cd=String(o.pair.code||'').trim();o.pair.code=cd?(cd.includes(sc)?cd:cd+' — '+sc):sc}
  delete o.pair.subCode;o.dday={...D0.dday,...(d.dday||{})};o.bands={...D0.bands,...(d.bands||{})};o.ui={...D0.ui,...(d.ui||{})};
- o.chars=[0,1].map(i=>({...D0.chars[i],...((d.chars||[])[i]||{})}));
+ o.chars=[0,1].map(i=>{const sv=(d.chars||[])[i]||{},c={...D0.chars[i],...sv};if(sv.hd===undefined)c.hd=c.name;return c}); // header-row name is its own field (copied once from the name for old data)
  if(!Array.isArray(o.guide)){ // older versions stored intro / tags / relation / notes
   const g=d.guide||{};o.guide=[{t:'Intro',b:g.intro||''},{t:'Relation',b:[(g.tags||[]).join(' / '),g.relation||''].filter(Boolean).join('\n\n')},{t:'Notes',b:(g.notes||[]).map(x=>'- '+x).join('\n')}]}
  return o};

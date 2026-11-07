@@ -1,1 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Nf3d6</title>
+<meta name="description" content="Nf3d6">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2032%2032%22%3E%3Cstyle%3E.t%7Bfill:%23fff%7D.p%7Bfill:%23000%7D.fr%7Bstroke:%23000%7D.nf%7Bfill:none%7D%40media%20(prefers-color-scheme:dark)%7B.t%7Bfill:%23000%7D.p%7Bfill:%23fff%7D.fr%7Bstroke:%23fff%7D%7D%3C/style%3E%3Crect%20class=%22t%22%20x=%223%22%20y=%223%22%20width=%2226%22%20height=%2226%22/%3E%3Cg%20class=%22p%22%20transform=%22translate(3.1999999999999993%202.719999999999999)%20scale(0.8)%22%3E%3Crect%20x=%2214.9%22%20y=%224.2%22%20width=%222.2%22%20height=%227%22/%3E%3Crect%20x=%2212.6%22%20y=%226.2%22%20width=%226.8%22%20height=%222.2%22/%3E%3Cpath%20d=%22M16%2012.2C11.4%2012.2%2010.2%2015.6%2011.2%2018H20.8C21.8%2015.6%2020.6%2012.2%2016%2012.2Z%22/%3E%3Crect%20x=%2210%22%20y=%2218.9%22%20width=%2212%22%20height=%221.9%22/%3E%3Cpath%20d=%22M11.4%2021.7H20.6C20.2%2023.2%2021%2024.4%2022%2026H10C11%2024.4%2011.8%2023.2%2011.4%2021.7Z%22/%3E%3Crect%20x=%229%22%20y=%2226.9%22%20width=%2214%22%20height=%222.1%22/%3E%3C/g%3E%3Crect%20class=%22nf%20fr%22%20x=%223.75%22%20y=%223.75%22%20width=%2224.5%22%20height=%2224.5%22%20stroke-width=%221.5%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#fff;--fg:#000;--mut:#8f8f8f;--line:#e4e4e4;--soft:#f6f6f6;--sans:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#000;--fg:#fff;--mut:#777;--line:#2a2a2a;--soft:#111}}
+@media(prefers-color-scheme:light){:root{color-scheme:light}}
+*{box-sizing:border-box;border-radius:0}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font:400 13px/1.6 var(--sans);letter-spacing:-.03em;-webkit-font-smoothing:antialiased;min-height:100vh}
+a{color:inherit;text-decoration:none}
+button,input{font:inherit;letter-spacing:inherit;color:inherit}
+button{background:none;border:0;padding:0;cursor:pointer;text-align:left}
+@keyframes in{to{opacity:1;transform:none}}
+.a{opacity:0;transform:translateY(8px);animation:in .55s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(var(--i)*.06s + .04s)}
+@media(prefers-reduced-motion:reduce){.a{animation:none;opacity:1;transform:none}*{transition:none!important}}
 
+/* ---- edit bar ---- */
+.eb{display:none;position:sticky;top:0;z-index:20;align-items:center;gap:8px;padding:8px 18px;background:var(--fg);color:var(--bg);font:600 10px var(--sans);letter-spacing:.1em}
+.edit .eb{display:flex}
+.eb span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.eb button{border:1px solid var(--bg);padding:0 10px;font:600 10px var(--sans);letter-spacing:.08em;color:var(--bg)}
+.eb button:hover{background:var(--bg);color:var(--fg)}
+
+/* ---- parts ---- */
+.av{position:relative;display:grid;place-items:center;width:84px;height:84px;flex:none;background:repeating-linear-gradient(135deg,var(--soft) 0 6px,transparent 6px 12px),var(--soft);font:600 9px var(--sans);letter-spacing:.1em;color:var(--mut)}
+.av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;-webkit-user-drag:none;user-select:none}
+.av i{position:absolute;width:10px;height:10px;border:0 solid var(--fg);pointer-events:none}
+.av i:nth-of-type(1){left:-2px;top:-2px;border-width:2px 0 0 2px}.av i:nth-of-type(2){right:-2px;top:-2px;border-width:2px 2px 0 0}
+.av i:nth-of-type(3){left:-2px;bottom:-2px;border-width:0 0 2px 2px}.av i:nth-of-type(4){right:-2px;bottom:-2px;border-width:0 2px 2px 0}
+label.av{cursor:pointer}
+.upl{position:absolute;left:0;right:0;bottom:0;background:var(--fg);color:var(--bg);font:600 9px var(--sans);letter-spacing:.1em;text-align:center;padding:2px 0}
+.mkq{width:8px;height:8px;border:1.5px solid var(--fg);display:inline-block;flex:none}.mkq.k{background:var(--fg)}
+.k{display:block;font:600 9px var(--sans);letter-spacing:.12em;color:var(--mut);margin-bottom:3px;text-transform:uppercase}
+.v{font:700 14px/1.35 var(--sans);letter-spacing:-.035em;word-break:keep-all;overflow-wrap:anywhere}
+
+/* ---- layout (mobile first) ---- */
+.W{padding:28px 18px 70px}
+.L{margin-bottom:26px}
+.L .id{display:flex;align-items:flex-end;gap:14px}
+.nm{margin:0;font:800 26px/1.05 var(--sans);letter-spacing:-.055em;overflow-wrap:anywhere}
+.hdl{color:var(--mut);font-size:11.5px;margin:6px 0 0}
+.bio{margin:12px 0 0;opacity:.62;font-size:12.5px;line-height:1.65;letter-spacing:-.04em;word-break:keep-all;overflow-wrap:break-word}
+.big{margin:0;font:800 28px/1.02 var(--sans);letter-spacing:-.06em;overflow-wrap:anywhere}.big em{font-style:normal;color:var(--mut)}
+
+/* sheet blocks */
+.blk{margin-bottom:16px}
+.bd{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--fg);color:var(--bg);padding:5px 10px;font:600 10px var(--sans);letter-spacing:.12em;text-transform:uppercase}
+.rws{border:1px solid var(--fg);border-top:0}
+.rw{display:grid;grid-template-columns:30px 1fr;border-bottom:1px solid var(--line)}.rw:last-child{border-bottom:0}
+.rw>.n{padding:11px 0 0 9px;font:600 10px var(--sans);color:var(--mut);font-variant-numeric:tabular-nums}
+.rw>.c{padding:10px 12px;border-left:1px solid var(--line);min-width:0}
+.rw.r3{grid-template-columns:30px 1fr 1fr}
+.dd{display:flex;align-items:baseline;gap:2px;font:800 52px/1 var(--sans);letter-spacing:-.06em;font-variant-numeric:tabular-nums}
+.dd small{font:800 22px var(--sans);color:var(--mut);letter-spacing:-.03em}
+.dbar{height:2px;background:var(--line);margin:8px 0 0;position:relative}.dbar i{position:absolute;inset:0 auto 0 0;background:var(--fg)}
+.dm{display:flex;justify-content:space-between;margin-top:6px;font:500 11px var(--sans);color:var(--mut)}.dm b{color:var(--fg);font-weight:600}
+.hd3{display:grid;grid-template-columns:30px 1fr 1fr;border-bottom:1px solid var(--fg);font:600 9px var(--sans);letter-spacing:.12em}
+.hd3>span{padding:6px 12px;display:flex;gap:6px;align-items:center;min-width:0}.hd3>span+span{border-left:1px solid var(--line)}
+.pin-mark{display:none;color:var(--fg)}.pin .pin-mark{display:inline}
+.pn{display:flex;align-items:center;gap:8px;margin-top:10px;font:800 19px/1.05 var(--sans);letter-spacing:-.05em}
+.pn .ch{font:400 10px var(--sans);color:var(--mut);transition:transform .3s,color .2s}
+.rv:hover .pn .ch,.rv.pin .pn .ch{transform:rotate(180deg);color:var(--fg)}
+.rw .av{width:100%;height:auto;aspect-ratio:1/1;max-width:170px}
+.pc{cursor:pointer}
+.drop{display:grid;grid-template-rows:0fr;transition:grid-template-rows .36s cubic-bezier(.3,.8,.2,1)}
+.drop>.in{overflow:hidden;min-height:0}
+.rv:hover .drop,.rv.pin .drop{grid-template-rows:1fr}
+.edit .drop{grid-template-rows:1fr}
+.gh{margin:0;font:800 16px/1.2 var(--sans);letter-spacing:-.04em}
+.gp{margin:4px 0 0;color:var(--mut);font-size:12.5px;line-height:1.65;word-break:keep-all;letter-spacing:-.03em}
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px}.tags span{border:1px solid var(--fg);padding:0 8px;font:500 11px/1.6 var(--sans)}
+.gu{margin:6px 0 0;padding:0;list-style:none}.gu li{display:flex;gap:10px;padding:5px 0;border-top:1px solid var(--line);font-size:12.5px;word-break:keep-all}.gu li:first-child{border-top:0}
+.gu li em{font:600 10px/1.9 var(--sans);font-style:normal;letter-spacing:.1em;color:var(--mut);flex:none;width:20px}.gu li span{flex:1;min-width:0}
+
+/* footer */
+.ft{display:flex;justify-content:space-between;align-items:center;padding:4px 4px 0;border-top:2px solid var(--fg);margin-top:26px}
+.nx{display:inline-flex;align-items:center;gap:8px;padding:11px 0;font:600 10px var(--sans);letter-spacing:.12em;cursor:pointer;transition:padding .25s cubic-bezier(.3,.8,.2,1),background .18s,color .18s}
+.nx:hover{background:var(--fg);color:var(--bg);padding-left:12px;padding-right:12px}
+.cp2{font:400 10px var(--sans);color:var(--mut);letter-spacing:0;display:flex;align-items:center;gap:6px}
+.lg{border:0;background:none;padding:6px;margin:-6px;font:500 11px var(--sans);letter-spacing:0;color:var(--fg);opacity:.14;cursor:pointer;transition:opacity .2s}.lg:hover,.lg:focus-visible{opacity:.5}
+.lgf{display:none;margin:18px 0 0}.lgf.on{display:block}
+.ug{display:flex;border:1px solid var(--fg);background:var(--bg)}
+.ug input{flex:1;min-width:0;border:0;outline:0;background:none;padding:7px 10px}.ug input+input{border-left:1px solid var(--line)}
+.ug input::placeholder{color:var(--mut)}
+.ug button{border:0;border-left:1px solid var(--fg);padding:0 14px;font-weight:600;font-size:15px;cursor:pointer}.ug button:hover{background:var(--fg);color:var(--bg)}
+.er{min-height:1.3em;margin:3px 0 0;font:600 11px var(--sans);color:var(--mut)}
+
+/* ---- edit mode ---- */
+.edit [contenteditable=true]{outline:1px dashed var(--mut);outline-offset:2px;min-width:2em;display:inline-block;max-width:100%}
+.edit .bio[contenteditable=true],.edit .gp[contenteditable=true]{display:block}
+.edit [contenteditable=true]:empty::before{content:"…";color:var(--mut)}
+.edit .k[contenteditable=true],.edit .v[contenteditable=true]{display:block;width:fit-content}
+.ctl{display:none}
+.edit .ctl{display:inline-flex}
+.xb,.addb,.ddc button{border:1px solid var(--fg);padding:0 8px;font:600 10px/18px var(--sans);letter-spacing:.06em;cursor:pointer;background:var(--bg);color:var(--fg)}
+.xb:hover,.addb:hover,.ddc button:hover{background:var(--fg);color:var(--bg)}
+.addb{display:none;width:100%;margin-top:8px;padding:6px;border-style:dashed;text-align:center}
+.edit .addb{display:block}
+.ddc{display:none;gap:6px;align-items:center;margin-top:10px;flex-wrap:wrap}
+.edit .ddc{display:flex}
+.ddc input{border:1px solid var(--fg);background:var(--bg);padding:2px 6px;font:500 12px var(--sans)}
+.rw>.n .xb{margin:2px 0 0 -3px;padding:0 4px;font-size:11px}
+
+/* ---- desktop ---- */
+@media(min-width:760px){
+ .eb{padding:9px 40px}
+ .W{display:grid;grid-template-columns:200px minmax(0,1fr);column-gap:48px;max-width:920px;margin:0 auto;padding:60px 40px 90px;min-height:100vh;align-content:center;align-items:start}
+ .L{position:sticky;top:44px;margin:0}.edit .L{top:64px}
+ .L .id{display:block}.L .id .av{width:112px;height:112px;margin-bottom:16px}
+ .nm{font-size:30px}.big{font-size:34px}
+ .W>.ft,.W>.lgf{grid-column:1/-1}
+ .dd{font-size:76px}.dd small{font-size:28px}
+ .rw .av{max-width:200px}.gh{font-size:18px}
+}
+</style></head>
+<body>
+<div class="eb" id="eb"><span id="ebm">EDIT MODE</span><button id="sv">SAVE</button><button id="ex">EXIT</button><button id="lo">LOGOUT</button></div>
+<div id="app"></div>
+<script>
+/* ===== Supabase (publishable key: safe to be public) ===== */
+const SB_URL='https://ouixfhlrqqhgppyvtuql.supabase.co';
+const SB_KEY='sb_publishable_dTrXVylr1j2Kt0ZO6Gca_w_mQ-Z-8Cw';
+const BUCKET='info';
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pad=n=>String(n).padStart(2,'0');
+
+/* ---- default content (used until the first SAVE) ---- */
+const DEF=()=>({
+ name:'rosie',handle:'@rosie · she/her',
+ bio:'체스 테마의 작은 사이트들을 만들고, 캐릭터 카이와 레이의 이야기를 글로 기록해요. 천천히 쓰고 오래 남기는 걸 좋아해요.',
+ avatar:'',
+ dday:{date:'2025-03-14',mode:'since'},
+ about:[{k:'ACTIVE',v:'2025.03 ~'},{k:'LIKES',v:'체스 · 글쓰기 · 위스키'},{k:'NOTE',v:'답장이 조금 느려요'}],
+ pairBio:'백과 흑으로 마주 앉은 두 사람의 페어 안내예요.',
+ chars:[{name:'Kai',photo:''},{name:'Ray',photo:''}],
+ spec:[{k:'AGE',v:['27세','26세']},{k:'HEIGHT',v:['184cm','178cm']},{k:'BIRTHDAY',v:['03.14','09.02']},{k:'RATING',v:['2712 GM','2604 IM']},{k:'LIKES',v:['위스키 · 비 오는 날','야식 · 오프닝 공부']}],
+ guide:{intro:'체스판에서 만나 서로를 이기려다 서로에게 지는 이야기예요. 이기는 쪽이 늘 바뀌는 사이.',tags:['라이벌','동거인','오래된 친구'],relation:'처음에는 서로의 수를 읽는 사이였다가, 어느새 말보다 수가 더 편해졌어요.',notes:['두 사람은 되도록 같이 그려주세요.','해석은 자유예요. 다른 관계로 보셔도 괜찮아요.','창작은 환영해요. 출처만 남겨주세요.']}
+});
+let sb=null,S=DEF(),logged=false,editing=false,lgOpen=false,lgErr='',ft=null,page=1;
+
+/* ---- helpers ---- */
+const getp=(o,p)=>p.split('.').reduce((a,k)=>a==null?a:a[k],o);
+const setp=(o,p,v)=>{const ks=p.split('.'),l=ks.pop();const t=ks.reduce((a,k)=>a[k],o);t[l]=v};
+const ed=()=>editing?' contenteditable="true"':'';
+const T=(p,cls='',tag='span')=>`<${tag} class="${cls}" data-p="${p}"${ed()}>${esc(getp(S,p))}</${tag}>`;
+const sq=i=>`<i class="mkq${i?' k':''}"></i>`;
+const photo=(p,label)=>{const u=getp(S,p),inner=u?`<img src="${esc(u)}" alt="" draggable="false">`:label;
+ return editing?`<label class="av">${inner}<i></i><i></i><i></i><i></i><span class="upl">UPLOAD</span><input type="file" accept="image/*" hidden data-up="${p}"></label>`:`<div class="av">${inner}<i></i><i></i><i></i><i></i></div>`};
+function dday(){
+ const t=new Date((S.dday.date||'')+'T00:00:00');if(isNaN(t))return null;
+ const now=new Date();now.setHours(0,0,0,0);const diff=Math.round((now-t)/864e5),since=S.dday.mode!=='until';
+ const lab=(since?'SINCE ':'UNTIL ')+S.dday.date.replace(/-/g,'.');
+ if(since){const n=Math.abs(diff),sign=diff>=0?'D+':'D-';
+  if(diff<0)return{p:sign,n,lab,sub:''};
+  const next=Math.ceil((diff+1)/100)*100;return{p:'D+',n:diff,lab,sub:`<div class="dbar"><i style="width:${diff%100}%"></i></div><div class="dm"><span>다음 기념일 <b>D+${next}</b></span><span><b>D-${next-diff}</b></span></div>`}}
+ const n=-diff;return{p:n>=0?'D-':'D+',n:Math.abs(n),lab,sub:''}}
+const U=s=>String(s||'').toUpperCase();
+const nm=i=>S.chars[i].name||'';
+
+/* ---- pages ---- */
+function pageMe(an){
+ const a=i=>an?` a" style="--i:${i}`:'"';
+ const d=dday();
+ const dblock=d?`<div class="dd"><small>${d.p}</small>${d.n}</div>${d.sub}`:'<div class="v" style="color:var(--mut)">—</div>';
+ const dctl=`<div class="ddc"><input type="date" data-dd="date" value="${esc(S.dday.date)}"><button type="button" data-a="ddmode">${S.dday.mode==='until'?'UNTIL (남은 날)':'SINCE (지난 날)'}</button></div>`;
+ const about=S.about.map((r,i)=>`<div class="rw"><span class="n">${i+2}.${editing?`<br><button class="xb ctl" data-a="rmabout" data-i="${i}" aria-label="delete">×</button>`:''}</span><div class="c"><span class="k"${ed()} data-p="about.${i}.k">${esc(r.k)}</span><div class="v"${ed()} data-p="about.${i}.v">${esc(r.v)}</div></div></div>`).join('');
+ return `<div class="W"><aside class="L${a(0)}"><div class="id">${photo('avatar','PHOTO')}<div>${T('name','nm','h1')}${T('handle','hdl','div')}</div></div>${T('bio','bio','p')}</aside>
+ <section class="Rt"><div class="blk${a(1)}"><div class="bd"><span>D-DAY · ${esc(d?d.lab:'')}</span><span>NO. 1</span></div><div class="rws"><div class="rw"><span class="n">1.</span><div class="c">${dblock}${dctl}</div></div></div></div>
+ <div class="blk${a(2)}"><div class="bd"><span>ABOUT</span><span>NO. 2</span></div><div class="rws">${about}</div><button class="addb" data-a="addabout">+ ADD ROW</button></div></section>
+ ${foot(an,1)}</div>`}
+function pagePair(an){
+ const a=i=>an?` a" style="--i:${i}`:'"';
+ const c0=nm(0),c1=nm(1);
+ const spec=S.spec.map((r,i)=>`<div class="rw r3"><span class="n">${i+1}${editing?`<br><button class="xb ctl" data-a="rmspec" data-i="${i}" aria-label="delete">×</button>`:''}</span><div class="c"><span class="k"${ed()} data-p="spec.${i}.k">${esc(r.k)}</span><div class="v"${ed()} data-p="spec.${i}.v.0">${esc(r.v[0])}</div></div><div class="c"><span class="k">${esc(r.k)}</span><div class="v"${ed()} data-p="spec.${i}.v.1">${esc(r.v[1])}</div></div></div>`).join('');
+ const g=S.guide;
+ const notes=g.notes.map((t,i)=>`<li><em>${pad(i+1)}</em><span${ed()} data-p="guide.notes.${i}">${esc(t)}</span>${editing?`<button class="xb ctl" data-a="rmnote" data-i="${i}" aria-label="delete">×</button>`:''}</li>`).join('');
+ return `<div class="W"><aside class="L${a(0)}"><h1 class="big">${esc(c0)}<br><em>&amp;</em> ${esc(c1)}</h1>${T('pairBio','bio','p')}</aside>
+ <section class="Rt"><div class="blk rv${editing?'':' '}${a(1)}" data-pin><div class="bd"><span>${esc(U(c0))} &amp; ${esc(U(c1))} · CHARACTERS</span><span>NO. 1</span></div><div class="rws">
+  <div class="hd3"><span>#</span><span>${sq(0)}${esc(U(c0))} · WHITE</span><span>${sq(1)}${esc(U(c1))} · BLACK<span class="pin-mark">· PINNED</span></span></div>
+  <div class="rw r3"><span class="n">1.</span><div class="c pc">${photo('chars.0.photo',U(c0))}<div class="pn">${T('chars.0.name','')}<span class="ch">▾</span></div></div><div class="c pc">${photo('chars.1.photo',U(c1))}<div class="pn">${T('chars.1.name','')}<span class="ch">▾</span></div></div></div>
+  <div class="drop"><div class="in">${spec}<button class="addb" data-a="addspec" style="margin:0 12px 10px;width:calc(100% - 24px)">+ ADD ROW</button></div></div></div></div>
+ <div class="blk${a(2)}"><div class="bd"><span>PAIR GUIDE</span><span>NO. 2</span></div><div class="rws">
+  <div class="rw"><span class="n">1.</span><div class="c"><h3 class="gh">한 줄 소개</h3><p class="gp"${ed()} data-p="guide.intro">${esc(g.intro)}</p></div></div>
+  <div class="rw"><span class="n">2.</span><div class="c"><h3 class="gh">관계</h3><div class="tags">${editing?`<span class="tl"${ed()} data-p="guide.tags" data-t="list" style="border:0;padding:0">${esc(g.tags.join(', '))}</span>`:g.tags.map(t=>`<span>${esc(t)}</span>`).join('')}</div><p class="gp"${ed()} data-p="guide.relation">${esc(g.relation)}</p></div></div>
+  <div class="rw"><span class="n">3.</span><div class="c"><h3 class="gh">안내</h3><ul class="gu">${notes}</ul><button class="addb" data-a="addnote">+ ADD ITEM</button></div></div></div></div></section>
+ ${foot(an,2)}</div>`}
+function foot(an,n){
+ const a=an?` a" style="--i:6`:'';
+ const nav=n===1?`<a class="nx" href="#/pair">PAIR <span>→</span></a>`:`<a class="nx" href="#/"><span>←</span> ME</a>`;
+ const cp=`<span class="cp2">© ${esc(S.name)}<button class="lg" id="lg" aria-label="login">#</button></span>`;
+ const row=n===1?cp+nav:nav+cp;
+ return `<footer class="ft${a}">${row}</footer><div class="lgf${lgOpen&&!logged?' on':''}" id="lgf"><form class="ug" id="uf" autocomplete="off"><input type="email" placeholder="email" aria-label="email"><input type="password" placeholder="password" aria-label="password"><button aria-label="login">→</button></form><p class="er" id="er">${esc(lgErr)}</p></div>`}
+function paint(an=false){
+ document.body.classList.toggle('edit',editing);
+ document.title='Nf3d6';
+ $('#app').innerHTML=page===1?pageMe(an):pagePair(an);
+}
+function route(){page=/^#\/pair/.test(location.hash)?2:1;paint(true);window.scrollTo(0,0)}
+function flash(m,ms=2500){$('#ebm').textContent=m;clearTimeout(ft);ft=setTimeout(()=>$('#ebm').textContent='EDIT MODE',ms)}
+
+/* ---- load / save ---- */
+async function load(){
+ if(!sb)return;
+ const r=await sb.from('site').select('data').eq('id',1).maybeSingle();
+ if(r.error){console.error(r.error);return}
+ const d=r.data&&r.data.data;
+ if(d&&Object.keys(d).length)S={...DEF(),...d,dday:{...DEF().dday,...(d.dday||{})},guide:{...DEF().guide,...(d.guide||{})}};
+}
+async function save(){
+ if(!sb){flash('DEMO — Supabase 미연결');return}
+ flash('SAVING…',30000);
+ try{
+  const clean=JSON.parse(JSON.stringify(S));
+  const r=await sb.from('site').upsert({id:1,data:clean,updated_at:new Date().toISOString()}).select();
+  if(r.error)throw r.error;
+  if(!r.data||!r.data.length)throw new Error('권한이 없어요(로그인을 확인해 주세요)');
+  flash('SAVED ✓',3000);
+ }catch(err){flash('FAILED: '+(err.message||err),6000)}
+}
+
+/* ---- events ---- */
+const app=$('#app');
+app.addEventListener('click',e=>{
+ if(e.target.closest('#lg')){
+  if(logged){editing=!editing;paint();return}
+  lgOpen=!lgOpen;paint();if(lgOpen){const i=$('#lgf input');i&&i.focus()}return}
+ const b=e.target.closest('[data-a]');
+ if(b){const a=b.dataset.a,i=+b.dataset.i;
+  if(a==='addabout')S.about.push({k:'KEY',v:'value'});
+  else if(a==='rmabout')S.about.splice(i,1);
+  else if(a==='addspec')S.spec.push({k:'KEY',v:['','']});
+  else if(a==='rmspec')S.spec.splice(i,1);
+  else if(a==='addnote')S.guide.notes.push('새 항목');
+  else if(a==='rmnote')S.guide.notes.splice(i,1);
+  else if(a==='ddmode')S.dday.mode=S.dday.mode==='until'?'since':'until';
+  paint();return}
+ if(editing)return;
+ const rv=e.target.closest('[data-pin]');if(rv&&!e.target.closest('a'))rv.classList.toggle('pin');
+});
+app.addEventListener('input',e=>{
+ const t=e.target,p=t.dataset&&t.dataset.p;if(!p||!t.isContentEditable)return;
+ const txt=t.textContent;
+ if(t.dataset.t==='list')setp(S,p,txt.split(/[,·]/).map(x=>x.trim()).filter(Boolean));else setp(S,p,txt);
+});
+app.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.isContentEditable){e.preventDefault();e.target.blur()}});
+app.addEventListener('paste',e=>{if(e.target.isContentEditable){e.preventDefault();document.execCommand('insertText',false,(e.clipboardData.getData('text')||'').replace(/\s*\n+\s*/g,' '))}});
+app.addEventListener('focusout',e=>{if(e.target.isContentEditable&&editing&&(e.target.dataset.p==='name'||e.target.dataset.p==='chars.0.name'||e.target.dataset.p==='chars.1.name'))paint()});
+app.addEventListener('submit',async e=>{
+ e.preventDefault();
+ const [m,p]=[...e.target.querySelectorAll('input')],er=$('#er');
+ if(!m.value||!p.value){er.textContent='Enter email and password';return}
+ if(!sb){er.textContent='Supabase가 연결되지 않았어요';return}
+ er.textContent='…';
+ const {error}=await sb.auth.signInWithPassword({email:m.value.trim(),password:p.value});
+ if(error){er.textContent='Login failed';return}
+ logged=true;lgOpen=false;lgErr='';
+ await load();editing=true;paint();
+});
+app.addEventListener('change',async e=>{
+ const dd=e.target.closest('input[data-dd]');if(dd){S.dday.date=dd.value;paint();return}
+ const i=e.target.closest('input[data-up]');if(!i||!i.files[0])return;
+ const f=i.files[0],key=i.dataset.up;
+ if(!f.type.startsWith('image/')){flash('이미지 파일만 올릴 수 있어요');return}
+ if(f.size>5*1024*1024){flash('5MB 이하만 올릴 수 있어요');return}
+ if(!sb){setp(S,key,URL.createObjectURL(f));paint();return}
+ flash('UPLOADING…',20000);
+ const ext=(f.name.split('.').pop()||'png').toLowerCase().replace(/[^a-z0-9]/g,'')||'png';
+ const path=`${key.replace(/\W+/g,'-')}-${Date.now()}.${ext}`;
+ const {error}=await sb.storage.from(BUCKET).upload(path,f,{contentType:f.type,cacheControl:'3600'});
+ if(error){flash('UPLOAD FAILED: '+error.message,6000);return}
+ setp(S,key,sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl);
+ paint();flash('UPLOADED — SAVE 를 눌러 적용');
+});
+$('#sv').onclick=save;
+$('#ex').onclick=async()=>{S=DEF();await load();editing=false;paint()};
+$('#lo').onclick=async()=>{if(sb)await sb.auth.signOut();logged=false;editing=false;S=DEF();await load();paint()};
+window.addEventListener('hashchange',route);
+
+/* ---- start ---- */
+(async()=>{
+ if(SB_URL&&SB_KEY&&window.supabase){
+  sb=window.supabase.createClient(SB_URL,SB_KEY);
+  try{const {data:{session}}=await sb.auth.getSession();logged=!!session;await load()}catch(err){console.error(err)}
+ }
+ route();
+})();
+</script></body></html>

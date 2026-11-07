@@ -64,8 +64,6 @@ label.av{cursor:pointer}
 .hd3>span{padding:6px 12px;display:flex;gap:6px;align-items:center;min-width:0}.hd3>span+span{border-left:1px solid var(--line)}
 .pin-mark{display:none;color:var(--fg)}.pin .pin-mark{display:inline}
 .pn{display:flex;align-items:center;gap:8px;margin-top:10px;font:800 19px/1.05 var(--sans);letter-spacing:-.05em}
-.pn .ch{font:400 10px var(--sans);color:var(--mut);transition:transform .3s,color .2s}
-.rv:hover .pn .ch,.rv.pin .pn .ch{transform:rotate(180deg);color:var(--fg)}
 .rw .av{width:100%;height:auto;aspect-ratio:1/1;max-width:170px}
 .pc{cursor:pointer}
 .drop{display:grid;grid-template-rows:0fr;transition:grid-template-rows .36s cubic-bezier(.3,.8,.2,1)}
@@ -185,7 +183,7 @@ function pagePair(an){
  return `<div class="W"><aside class="L${a(0)}"><h1 class="big">${esc(c0)}<br><em>&amp;</em> ${esc(c1)}</h1>${T('pairBio','bio','p')}</aside>
  <section class="Rt"><div class="blk rv${editing?'':' '}${a(1)}" data-pin><div class="bd"><span>${esc(U(c0))} &amp; ${esc(U(c1))} · CHARACTERS</span><span>NO. 1</span></div><div class="rws">
   <div class="hd3"><span>#</span><span>${sq(0)}${esc(U(c0))} · WHITE</span><span>${sq(1)}${esc(U(c1))} · BLACK<span class="pin-mark">· PINNED</span></span></div>
-  <div class="rw r3"><span class="n">1.</span><div class="c pc">${photo('chars.0.photo',U(c0))}<div class="pn">${T('chars.0.name','')}<span class="ch">▾</span></div></div><div class="c pc">${photo('chars.1.photo',U(c1))}<div class="pn">${T('chars.1.name','')}<span class="ch">▾</span></div></div></div>
+  <div class="rw r3"><span class="n">1.</span><div class="c pc">${photo('chars.0.photo',U(c0))}<div class="pn">${T('chars.0.name','')}</div></div><div class="c pc">${photo('chars.1.photo',U(c1))}<div class="pn">${T('chars.1.name','')}</div></div></div>
   <div class="drop"><div class="in">${spec}<button class="addb" data-a="addspec" style="margin:0 12px 10px;width:calc(100% - 24px)">+ ADD ROW</button></div></div></div></div>
  <div class="blk${a(2)}"><div class="bd"><span>PAIR GUIDE</span><span>NO. 2</span></div><div class="rws">
   <div class="rw"><span class="n">1.</span><div class="c"><h3 class="gh">한 줄 소개</h3><p class="gp"${ed()} data-p="guide.intro">${esc(g.intro)}</p></div></div>

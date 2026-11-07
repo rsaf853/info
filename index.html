@@ -148,6 +148,21 @@ label.av{cursor:pointer}
  .dd .fn{font-size:84px}.dd small{font-size:26px}
  .rw .av{max-width:190px}.gh{font-size:16px}
 }
+
+/* ---------- batch: # counter, marker colours, sizes, weights, login ---------- */
+.mkq{background:#fff}.mkq.k{background:#000}                     /* white / black markers keep their colours in both themes */
+.bd .pin-mark{color:inherit}
+.dm b{font-weight:600}
+.W.p1 .v{font-weight:500}                                        /* page 1: lighter body text */
+.lg,.lg:hover{opacity:0}.lg:focus-visible{opacity:.35}           /* the login # is invisible */
+.L.pr .dg{width:84px}                                            /* page 2 picture = the size of the page 1 photo (84 / 112) */
+.pt .l{font-size:10px}.pt .t{font-size:18px;line-height:1.2}.pt .s{font-size:11.5px}
+.ctls{display:none;flex-direction:column;gap:2px;margin:2px 0 0 -3px}
+.edit:not(.prev) .ctls{display:inline-flex}
+.rw>.n .ctls .xb{margin:0;padding:0 4px;font-size:11px;line-height:16px}
+.xb:disabled{opacity:.3;cursor:default;pointer-events:none}
+.phl{margin-top:6px}.phl .v{font-size:12px}
+@media(min-width:760px){.L.pr .dg{width:112px;margin-bottom:16px}.pt .l{font-size:10px}.pt .t{font-size:21px}.pt .s{font-size:12px}}
 </style></head>
 <body>
 <div class="eb" id="eb"><span id="ebm">EDIT MODE</span><button id="pv">PREVIEW</button><button id="sv">SAVE</button><button id="ex">EXIT</button><button id="lo">LOGOUT</button></div>
@@ -209,14 +224,15 @@ const photo=(p,label)=>{const u=getp(S,p),inner=u?`<img src="${esc(u)}" alt="" d
 /* dates are always DD.MM.YYYY on screen (stored as YYYY-MM-DD) */
 const iso2dmy=i=>{const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(i||'');return m?`${m[3]}.${m[2]}.${m[1]}`:''};
 const dmy2iso=t=>{const m=/^\s*(\d{1,2})[.\-\/\s](\d{1,2})[.\-\/\s](\d{4})\s*$/.exec(t||'');if(!m)return null;const d=+m[1],mo=+m[2],y=+m[3],dt=new Date(y,mo-1,d);return dt.getFullYear()===y&&dt.getMonth()===mo-1&&dt.getDate()===d?`${y}-${pad(mo)}-${pad(d)}`:null};
+const unit=n=>n>=365&&n%365===0?(n/365)+(n/365===1?' year':' years'):n+(n===1?' day':' days');
 function dday(){
  const t=new Date((S.dday.date||'')+'T00:00:00');if(isNaN(t))return null;
  const now=new Date();now.setHours(0,0,0,0);const diff=Math.round((now-t)/864e5);
  if(S.dday.mode!=='until'){
-  if(diff<0)return{p:'D-',n:-diff,sub:''};
-  const next=Math.ceil((diff+1)/100)*100;
-  return{p:'D+',n:diff,pct:diff%100,sub:`<div class="dm"><span>${T('dday.next','','span','NEXT')} <b>D+${next}</b></span><span><b>D-${next-diff}</b></span></div>`}}
- return{p:diff<=0?'D-':'D+',n:Math.abs(diff),sub:''}}
+  if(diff<0)return{n:-diff,sub:''};
+  const n100=Math.ceil((diff+1)/100)*100,n365=Math.ceil((diff+1)/365)*365,next=Math.min(n100,n365),prev=Math.max(Math.floor(diff/100)*100,Math.floor(diff/365)*365);
+  return{n:diff,pct:Math.round((diff-prev)/(next-prev)*100),sub:`<div class="dm"><span>${T('dday.next','','span','NEXT')} <b>${unit(next)}</b></span><span><b>${unit(next-diff)}</b> left</span></div>`}}
+ return{n:Math.abs(diff),sub:''}}
 const U=s=>String(s||'').toUpperCase();
 const nm=i=>S.chars[i].name||'';
 const bandTxt=(p,auto)=>live()?`<span data-p="${p}" contenteditable="true">${esc(getp(S,p)||auto||'')}</span>`:`<span>${esc(getp(S,p)||auto||'')}</span>`;
@@ -225,12 +241,13 @@ const bandTxt=(p,auto)=>live()?`<span data-p="${p}" contenteditable="true">${esc
 function pageMe(an){
  const a=i=>an?` a" style="--i:${i}`:'"';
  const d=dday();
- const dblock=d?`<div class="dd"><small>${d.p}</small><span class="fn" style="--p:${d.pct||0}%" aria-label="${d.p}${d.n}">${d.n}</span></div>${d.sub}`:'<div class="v" style="color:var(--mut)">—</div>';
+ const dblock=d?`<div class="dd"><span class="fn" style="--p:${d.pct||0}%" aria-label="${d.n} days">#${d.n}</span></div>${d.sub}`:'<div class="v" style="color:var(--mut)">—</div>';
  const dctl=`<div class="ddc"><input type="text" inputmode="numeric" placeholder="DD.MM.YYYY" data-dd="date" value="${esc(iso2dmy(S.dday.date))}"><button type="button" data-a="ddmode">${S.dday.mode==='until'?'UNTIL':'SINCE'}</button></div>`;
- const about=S.about.map((r,i)=>`<div class="rw"><span class="n">${i+1}.${live()?`<br><button class="xb ctl" data-a="rmabout" data-i="${i}" aria-label="delete">×</button>`:''}</span><div class="c"><span class="k"${live()?' contenteditable="true"':''} data-p="about.${i}.k">${esc(r.k)}</span>${MDF(`about.${i}.v`,'v',true)}</div></div>`).join('');
- return `<div class="W"><aside class="L${a(0)}"><div class="id">${photo('avatar','PHOTO')}<div>${T('name','nm','h1')}${T('handle','hdl','div')}</div></div>${MDF('bio','bio')}</aside>
- <section class="Rt"><div class="blk${a(1)}"><div class="bd"><span>${T('dday.label','','span','KGA')} #${esc(iso2dmy(S.dday.date))}</span><span class="no">NO. 1</span></div><div class="rws"><div class="rw"><span class="n">1.</span><div class="c">${dblock}${dctl}</div></div></div></div>
- <div class="blk${a(2)}"><div class="bd">${bandTxt('bands.about','ABOUT')}<span class="no">NO. 2</span></div><div class="rws">${about}</div><button class="addb" data-a="addabout">+ ADD ROW</button></div></section>
+ const mv=(k,i,n)=>live()?`<br><span class="ctls ctl"><button type="button" class="xb" data-a="mv${k}" data-i="${i}" data-d="-1" aria-label="move up"${i===0?' disabled':''}>↑</button><button type="button" class="xb" data-a="mv${k}" data-i="${i}" data-d="1" aria-label="move down"${i===n-1?' disabled':''}>↓</button><button type="button" class="xb" data-a="rm${k}" data-i="${i}" aria-label="delete">×</button></span>`:'';
+ const about=S.about.map((r,i)=>`<div class="rw"><span class="n">${i+1}.${mv('about',i,S.about.length)}</span><div class="c"><span class="k"${live()?' contenteditable="true"':''} data-p="about.${i}.k">${esc(r.k)}</span>${MDF(`about.${i}.v`,'v',true)}</div></div>`).join('');
+ return `<div class="W p1"><aside class="L${a(0)}"><div class="id">${photo('avatar','PHOTO')}<div>${T('name','nm','h1')}${T('handle','hdl','div')}</div></div>${MDF('bio','bio')}</aside>
+ <section class="Rt"><div class="blk${a(1)}"><div class="bd"><span>${T('dday.label','','span','KGA')} #${esc(iso2dmy(S.dday.date))}</span><span class="no">MOVE 1</span></div><div class="rws"><div class="rw"><span class="n">1.</span><div class="c">${dblock}${dctl}</div></div></div></div>
+ <div class="blk${a(2)}"><div class="bd">${bandTxt('bands.about','ABOUT')}<span class="no">MOVE 2</span></div><div class="rws">${about}</div><button class="addb" data-a="addabout">+ ADD ROW</button></div></section>
  ${foot(an,1)}</div>`}
 function titleBlock(){
  const P=S.pair,L=live();
@@ -240,15 +257,16 @@ function titleBlock(){
  return `${code}${title}${sb}`}
 function pagePair(an){
  const a=i=>an?` a" style="--i:${i}`:'"';
+ const mv=(k,i,n)=>live()?`<br><span class="ctls ctl"><button type="button" class="xb" data-a="mv${k}" data-i="${i}" data-d="-1" aria-label="move up"${i===0?' disabled':''}>↑</button><button type="button" class="xb" data-a="mv${k}" data-i="${i}" data-d="1" aria-label="move down"${i===n-1?' disabled':''}>↓</button><button type="button" class="xb" data-a="rm${k}" data-i="${i}" aria-label="delete">×</button></span>`:'';
  const c0=nm(0),c1=nm(1),auto=`${U(c0)} & ${U(c1)} · CHARACTERS`;
- const spec=S.spec.map((r,i)=>`<div class="rw r3 sp3"><span class="n">${i+1}${live()?`<br><button class="xb ctl" data-a="rmspec" data-i="${i}" aria-label="delete">×</button>`:''}</span><div class="c"><span class="k"${live()?' contenteditable="true"':''} data-p="spec.${i}.k">${esc(r.k)}</span>${MDF(`spec.${i}.v.0`,'v',true)}</div><div class="c"><span class="k">${esc(r.k)}</span>${MDF(`spec.${i}.v.1`,'v',true)}</div></div>`).join('');
- const guide=S.guide.map((g,i)=>`<div class="rw"><span class="n">${i+1}.${live()?`<br><button class="xb ctl" data-a="rmguide" data-i="${i}" aria-label="delete">×</button>`:''}</span><div class="c">${T(`guide.${i}.t`,'gh','h3','Title')}${MDF(`guide.${i}.b`,'gp')}</div></div>`).join('');
+ const spec=S.spec.map((r,i)=>`<div class="rw r3 sp3"><span class="n">${i+2}.${mv('spec',i,S.spec.length)}</span><div class="c"><span class="k"${live()?' contenteditable="true"':''} data-p="spec.${i}.k">${esc(r.k)}</span>${MDF(`spec.${i}.v.0`,'v',true)}</div><div class="c"><span class="k">${esc(r.k)}</span>${MDF(`spec.${i}.v.1`,'v',true)}</div></div>`).join('');
+ const guide=S.guide.map((g,i)=>`<div class="rw"><span class="n">${i+1}.${mv('guide',i,S.guide.length)}</span><div class="c">${T(`guide.${i}.t`,'gh','h3','Title')}${MDF(`guide.${i}.b`,'gp')}</div></div>`).join('');
  return `<div class="W"><aside class="L pr${a(0)}"><div class="dg" role="img" aria-label="knight's jump diagram">${jumpSVG(ini(c0,'K'),ini(c1,'R'))}</div><div class="pt">${titleBlock()}</div></aside>
- <section class="Rt"><div class="blk rv${a(1)}" data-pin><div class="bd">${bandTxt('bands.chars',auto)}<span class="no">NO. 3</span></div><div class="rws">
-  <div class="hd3"><span>#</span><span>${sq(0)}${esc(U(c0))} · ${T('chars.0.side','','span','SIDE')}</span><span>${sq(1)}${esc(U(c1))} · ${T('chars.1.side','','span','SIDE')}<span class="pin-mark">· PINNED</span></span></div>
-  <div class="rw r3"><span class="n">1.</span><div class="c pc">${photo('chars.0.photo',U(c0))}<div class="pn">${T('chars.0.name','')}</div></div><div class="c pc">${photo('chars.1.photo',U(c1))}<div class="pn">${T('chars.1.name','')}</div></div></div>
+ <section class="Rt"><div class="blk rv${a(1)}" data-pin><div class="bd">${bandTxt('bands.chars',auto)}<span class="no"><span class="pin-mark">PINNED · </span>MOVE 3</span></div><div class="rws">
+  <div class="hd3"><span>#</span><span>${sq(0)}${esc(U(c0))} · ${T('chars.0.side','','span','SIDE')}</span><span>${sq(1)}${esc(U(c1))} · ${T('chars.1.side','','span','SIDE')}</span></div>
+  <div class="rw r3"><span class="n">1.</span><div class="c pc">${photo('chars.0.photo',esc(S.chars[0].ph||'PHOTO'))}<div class="pn">${T('chars.0.name','')}</div>${live()?`<div class="phl"><span class="k">PHOTO TEXT</span>${T('chars.0.ph','v','div','PHOTO')}</div>`:''}</div><div class="c pc">${photo('chars.1.photo',esc(S.chars[1].ph||'PHOTO'))}<div class="pn">${T('chars.1.name','')}</div>${live()?`<div class="phl"><span class="k">PHOTO TEXT</span>${T('chars.1.ph','v','div','PHOTO')}</div>`:''}</div></div>
   <div class="drop"><div class="in">${spec}<button class="addb" data-a="addspec" style="margin:0 12px 10px;width:calc(100% - 24px)">+ ADD ROW</button></div></div></div></div>
- <div class="blk${a(2)}"><div class="bd">${bandTxt('bands.guide','PAIR GUIDE')}<span class="no">NO. 4</span></div><div class="rws">${guide}</div><button class="addb" data-a="addguide">+ ADD SECTION</button></div></section>
+ <div class="blk${a(2)}"><div class="bd">${bandTxt('bands.guide','PAIR GUIDE')}<span class="no">MOVE 4</span></div><div class="rws">${guide}</div><button class="addb" data-a="addguide">+ ADD SECTION</button></div></section>
  ${foot(an,2)}</div>`}
 function foot(an,n){
  const a=an?` a" style="--i:6`:'';
@@ -306,6 +324,7 @@ app.addEventListener('click',e=>{
  if(b){const a=b.dataset.a,i=+b.dataset.i;
   if(a==='addabout')S.about.push({k:'KEY',v:'value'});
   else if(a==='rmabout')S.about.splice(i,1);
+  else if(a==='mvabout'||a==='mvspec'||a==='mvguide'){const arr=a==='mvabout'?S.about:a==='mvspec'?S.spec:S.guide,j=i+(+b.dataset.d);if(j>=0&&j<arr.length)[arr[i],arr[j]]=[arr[j],arr[i]]}
   else if(a==='addspec')S.spec.push({k:'KEY',v:['','']});
   else if(a==='rmspec')S.spec.splice(i,1);
   else if(a==='addguide')S.guide.push({t:'Title',b:'Text'});

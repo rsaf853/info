@@ -163,71 +163,6 @@ label.av{cursor:pointer}
 .xb:disabled{opacity:.3;cursor:default;pointer-events:none}
 .phl{margin-top:6px}.phl .v{font-size:12px}
 @media(min-width:760px){.L.pr .dg{width:112px;margin-bottom:16px}.pt .l{font-size:10px}.pt .t{font-size:21px}.pt .s{font-size:12px}}
-
-/* ---------- highlight styles (==text== is style 1; =={2}text== … =={6}text==) ---------- */
-.md mark.h2{background:var(--fg);color:var(--bg);border-bottom:0}
-.md mark.h3{background:none;border-bottom:2px solid var(--fg);padding:0 .08em}
-.md mark.h4{background:none;border:1px solid var(--fg);padding:0 .3em}
-.md mark.h5{background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--fg) 34%,transparent) 0 1.5px,transparent 1.5px 5px);border-bottom:0;padding:0 .3em}
-.md mark.h6{background:none;border-bottom:2px dotted var(--fg);padding:0 .08em}
-/* ---------- floating edit tools (appear above a text selection in edit mode) ---------- */
-#tb{position:fixed;z-index:60;display:flex;align-items:center;flex-wrap:wrap;gap:1px;max-width:min(320px,calc(100vw - 12px));background:var(--fg);color:var(--bg);padding:3px;box-shadow:0 6px 18px rgba(0,0,0,.28)}
-#tb[hidden]{display:none}
-#tb button{width:26px;height:26px;display:grid;place-items:center;border:0;background:none;color:inherit;font:700 12px var(--sans);cursor:pointer;padding:0}
-#tb button:hover,#tb button.on{background:var(--bg);color:var(--fg)}
-#tb .tsep{width:1px;height:16px;background:currentColor;opacity:.3;margin:0 3px}
-#tb .thl{width:auto;padding:0 8px;letter-spacing:.06em}
-#tb .tbh{flex-basis:100%;display:flex;flex-wrap:wrap;gap:2px;padding:4px 1px 2px;margin-top:3px;border-top:1px solid color-mix(in srgb,var(--bg) 28%,transparent)}
-#tb .tbh[hidden]{display:none}
-#tb .tbh button{width:auto;min-width:34px;height:28px;padding:0 5px;background:var(--bg);color:var(--fg);font-weight:600}
-#tb .tbh .md{display:contents}#tb .tbh mark{font-size:12px}
-/* ---------- blocks ---------- */
-.blkx{position:relative}
-.bb{padding:16px 18px 18px}
-.bk{font:700 9px var(--sans);letter-spacing:.12em;color:var(--mut)}
-.bx-txt{font:400 14.5px/1.75 var(--sans)}.bx-txt p{margin:0 0 .7em}.bx-cols{column-count:2;column-gap:28px}
-.bx-lead{font:700 21px/1.4 var(--sans);letter-spacing:-.05em;margin:0 0 12px;word-break:keep-all}
-.bx-rows{counter-reset:bn}.bx-row{counter-increment:bn;display:grid;grid-template-columns:28px 1fr auto;padding:14px 0;border-top:1px solid var(--line);align-items:baseline}.bx-row:first-child{border-top:0}
-.bx-row::before{content:counter(bn);font:600 14px/1 var(--sans);color:var(--mut)}.bx-row .tt{font:900 26px/1.1 var(--sans);letter-spacing:-.065em}.bx-row .nt{grid-column:2;color:var(--mut);font-size:13px;margin-top:4px}
-.bx-l2,.bx-ck{margin:0;padding:0;list-style:none}.bx-l2 li{display:grid;grid-template-columns:34px 1fr auto;padding:9px 0;border-top:1px solid var(--line);font-size:14px}.bx-l2 li:first-child{border-top:0}.bx-l2 em{font:700 10px/2 var(--sans);letter-spacing:.1em;font-style:normal;color:var(--mut)}
-.bx-ck li{display:flex;gap:10px;padding:7px 0;border-top:1px solid var(--line);align-items:center}.bx-ck li:first-child{border-top:0}.bx-cb{width:13px;height:13px;border:1.5px solid var(--fg);flex:none;display:block}.bx-ck li.d .bx-cb{background:var(--fg)}.bx-ck li.d>span{color:var(--mut);text-decoration:line-through}.edit:not(.prev) .bx-cb{cursor:pointer}
-.bx-kv{margin:0}.bx-kv .r{display:grid;grid-template-columns:110px 1fr;padding:9px 0;border-top:1px solid var(--line);align-items:baseline}.bx-kv .r:first-child{border-top:0}.bx-kv dt{font:700 10px var(--sans);letter-spacing:.12em;color:var(--mut)}.bx-kv dd{margin:0;font:800 19px/1.2 var(--sans);letter-spacing:-.05em}
-.bx-kvg{display:grid;grid-template-columns:repeat(2,1fr);border:1px solid var(--line)}.bx-kvg>div{padding:10px 12px;border:1px solid var(--line);margin:-1px 0 0 -1px}.bx-kvg b{display:block;font:800 22px/1.1 var(--sans);letter-spacing:-.05em}
-.bx-q1{margin:0;padding:6px 0 6px 18px;border-left:4px solid var(--fg);font:800 24px/1.3 var(--sans);letter-spacing:-.055em;word-break:keep-all}.bx-q1 small{display:block;margin-top:8px;font:600 11px var(--sans);letter-spacing:.1em;color:var(--mut)}
-.bx-q2{text-align:center;margin:0;padding:10px 20px;font:900 30px/1.25 var(--sans);letter-spacing:-.06em;word-break:keep-all}.bx-q2::before{content:"“";display:block;font:900 70px/.6 var(--sans);color:var(--mut)}.bx-q2 small{display:block;margin-top:10px;font:600 11px var(--sans);letter-spacing:.1em;color:var(--mut)}
-.bx-lk a{display:grid;grid-template-columns:1fr auto;padding:12px 0;border-top:1px solid var(--line);font:800 18px var(--sans);letter-spacing:-.04em}.bx-lk a:first-child{border-top:0}.bx-lk a span{color:var(--mut);font-weight:500}.bx-lk a:hover{background:var(--fg);color:var(--bg);padding-left:8px;padding-right:8px}.bx-lk a:hover span{color:inherit}
-.bx-lk .bxlk{padding:8px 0;border-top:1px solid var(--line);font:800 16px var(--sans)}.bxu{color:var(--mut);font:500 12px var(--sans);margin-left:8px}
-.bx-lkb{display:flex;flex-wrap:wrap;gap:6px}.bx-lkb a,.bx-lkb .bxlk{border:1px solid var(--fg);padding:6px 14px;font:800 11px var(--sans);letter-spacing:.1em}.bx-lkb a:hover{background:var(--fg);color:var(--bg)}
-.bx-im{position:relative;overflow:hidden;background:var(--soft);height:var(--h,260px);width:100%;display:block}
-.bx-im img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:var(--fx,50%) var(--fy,50%)}
-.bx-im .id{display:none}
-@media(prefers-color-scheme:dark){.bx-im .il{display:none}.bx-im .id{display:block}}
-.bx-im.full{margin:0 -18px;width:calc(100% + 36px)}.bx-im.fr{border:1px solid var(--fg)}
-.bx-no{position:absolute;inset:0;display:grid;place-items:center;font:700 10px var(--sans);letter-spacing:.12em;color:var(--mut);background:repeating-linear-gradient(135deg,var(--soft) 0 6px,transparent 6px 12px)}
-.bx-cap{padding-top:8px}.bx-cap .t{font:800 20px/1.2 var(--sans);letter-spacing:-.05em}.bx-cap .s{color:var(--mut);font-size:13px}
-.bx-sp2{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;align-items:end}
-.bx-pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}.bx-pi .bx-im.sq{height:auto;aspect-ratio:1/1}.bx-pc{font:600 11px var(--sans);letter-spacing:.06em;color:var(--mut);padding-top:5px}
-.bx-cp{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:10px}.bx-cp .av{aspect-ratio:1/1;max-width:200px;width:100%;height:auto}.bx-cp .pn{font:900 22px/1 var(--sans);letter-spacing:-.06em;margin-top:10px}.bx-cp .pt{display:flex;align-items:center;gap:6px;font:700 10px var(--sans);letter-spacing:.12em;color:var(--mut);margin-top:4px}
-.bx-cmp .hd2,.bx-cmp .cr{display:grid;grid-template-columns:100px 1fr 1fr;padding:9px 4px;border-bottom:1px solid var(--line);align-items:baseline}.bx-cmp .hd2{border-bottom:2px solid var(--fg);font:700 10px var(--sans);letter-spacing:.12em;color:var(--mut)}.bx-cmp dt{font:700 10px var(--sans);letter-spacing:.12em;color:var(--mut)}.bx-cmp dd{margin:0;font:800 16px/1.25 var(--sans);letter-spacing:-.04em}
-.bx-d1{border:0;border-top:1px solid var(--line);margin:14px 0}.bx-d2{border:0;border-top:4px solid var(--fg);margin:14px 0}.bx-d3{height:20px;background:conic-gradient(var(--fg) 25%,transparent 0 50%,var(--fg) 0 75%,transparent 0) 0 0/20px 20px;border:1px solid var(--fg);margin:14px 0}.bx-d4{height:36px}
-.bxhint{margin:10px 0 0;font:500 11px var(--sans);color:var(--mut)}
-.bxd{margin:0 0 14px;position:relative}
-.bxrc{margin-left:8px;gap:2px}
-.bxtb{position:absolute;right:8px;top:-12px;z-index:5;display:none;background:var(--fg);color:var(--bg);box-shadow:0 5px 14px rgba(0,0,0,.25)}
-.edit:not(.prev) .bxtb{display:flex}
-.bxtb button,.bxtb .dsg{height:26px;min-width:26px;padding:0 8px;display:grid;place-items:center;font:700 11px var(--sans);letter-spacing:.06em;color:var(--bg);border:0;background:none;cursor:pointer}.bxtb .dsg{font-size:10px;letter-spacing:.1em}
-.bxtb button:hover{background:var(--bg);color:var(--fg)}.bxtb button:disabled{opacity:.35;pointer-events:none}.bxtb .sp{width:1px;background:currentColor;opacity:.3;margin:5px 2px}
-.bxadd{display:none;margin:2px 0 12px}.edit:not(.prev) .bxadd{display:block}
-.bxadd button{width:100%;padding:5px;border:1px dashed var(--line);color:var(--mut);font:700 10px var(--sans);letter-spacing:.14em;background:none;cursor:pointer}.bxadd button:hover{border-color:var(--fg);color:var(--fg)}
-.bxpal{display:none;border:1px solid var(--fg);padding:10px;margin:-6px 0 12px;background:var(--bg)}.edit:not(.prev) .bxpal{display:block}
-.bxpal .gr{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px}.bxpal button{border:1px solid var(--line);padding:8px 9px;text-align:left;background:none;color:var(--fg);cursor:pointer}.bxpal button:hover{background:var(--fg);color:var(--bg);border-color:var(--fg)}.bxpal b{display:block;font:800 12px var(--sans);letter-spacing:-.02em}.bxpal small{display:block;font:500 10px/1.3 var(--sans);color:var(--mut);margin-top:2px}.bxpal button:hover small{color:inherit;opacity:.7}
-.bxpop{position:absolute;right:8px;top:36px;z-index:8;width:min(300px,calc(100% - 16px));background:var(--bg);color:var(--fg);border:1px solid var(--fg);box-shadow:6px 6px 0 var(--fg);padding:12px}
-.bxpop h5{margin:0 0 8px;font:800 10px var(--sans);letter-spacing:.14em}.bxpop label{display:flex;justify-content:space-between;font:700 10px var(--sans);letter-spacing:.1em;color:var(--mut);margin-top:8px}.bxpop input[type=range]{width:100%}
-.bxtabs{display:flex;gap:4px}.bxtabs button{border:1px solid var(--line);padding:2px 10px;font:700 10px var(--sans);letter-spacing:.08em;background:none;color:var(--fg);cursor:pointer}.bxtabs button.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
-.bxfx{position:relative;border:1px solid var(--fg);cursor:crosshair;margin-top:6px;min-height:40px}.bxfx img{display:block;width:100%;pointer-events:none}.bxfx i{position:absolute;width:14px;height:14px;margin:-7px 0 0 -7px;border:2px solid #fff;box-shadow:0 0 0 1.5px #000;pointer-events:none}
-.bxtwo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}.bxth{position:relative;display:block!important;border:1px solid var(--fg);aspect-ratio:16/10;overflow:hidden;cursor:pointer;margin:0!important}.bxth .bxt{position:absolute;inset:0;display:grid;place-items:center}.bxth img{width:100%;height:100%;object-fit:cover;display:block}.bxth em{font:700 9px var(--sans);letter-spacing:.1em;color:var(--mut);font-style:normal}.bxth b{position:absolute;left:0;top:0;background:var(--fg);color:var(--bg);font:800 8px var(--sans);letter-spacing:.12em;padding:1px 5px}
-.bxnote{margin:6px 0 0;font:500 10.5px/1.5 var(--sans);color:var(--mut)}.bxdone{margin-top:8px}
-@media(max-width:759px){.bx-im{height:var(--mh,200px)}.bx-im img{object-position:var(--mfx,50%) var(--mfy,50%)}.bx-pi .bx-im:not(.sq){height:var(--mh,140px)}.bx-cols{column-count:1}.bx-sp2,.bx-cp{grid-template-columns:1fr}.bx-q2{font-size:24px}.bx-cmp .hd2,.bx-cmp .cr{grid-template-columns:78px 1fr 1fr}}
 </style></head>
 <body>
 <div class="eb" id="eb"><span id="ebm">EDIT MODE</span><button id="pv">PREVIEW</button><button id="sv">SAVE</button><button id="ex">EXIT</button><button id="lo">LOGOUT</button></div>
@@ -245,7 +180,7 @@ const pad=n=>String(n).padStart(2,'0');
 
 /* ---- markdown: marked + ==highlight== (same syntax as e4e5), raw HTML is escaped ---- */
 const MD_OK=typeof marked!=='undefined';
-if(MD_OK){marked.use({breaks:true,gfm:true,renderer:{html(h){return esc(typeof h==='string'?h:(h&&h.text)||'')}},extensions:[{name:'hl',level:'inline',start(x){return x.indexOf('==')},tokenizer(x){const m=/^==(?:\{([1-6])\})?(?=[^\s=])([\s\S]*?[^\s=])==(?!=)/.exec(x);if(m)return{type:'hl',raw:m[0],s:m[1]||'1',text:m[2],tokens:this.lexer.inlineTokens(m[2])}},renderer(t){return`<mark class="h${t.s}">${this.parser.parseInline(t.tokens)}</mark>`}}]})}
+if(MD_OK){marked.use({breaks:true,gfm:true,renderer:{html(h){return esc(typeof h==='string'?h:(h&&h.text)||'')}},extensions:[{name:'hl',level:'inline',start(x){return x.indexOf('==')},tokenizer(x){const m=/^==(?=[^\s=])([\s\S]*?[^\s=])==(?!=)/.exec(x);if(m)return{type:'hl',raw:m[0],text:m[1],tokens:this.lexer.inlineTokens(m[1])}},renderer(t){return`<mark>${this.parser.parseInline(t.tokens)}</mark>`}}]})}
 const mdr=(s,inline)=>{s=String(s||'');let h=MD_OK?(inline?marked.parseInline(s):marked.parse(s)):esc(s).replace(/\n/g,'<br>');return h.replace(/<a /g,'<a target="_blank" rel="noopener" ')};
 
 /* ---- default content (used until the first SAVE) ---- */
@@ -258,9 +193,8 @@ const DEF=()=>({
  ui:{pair:'PAIR',me:'ME'},
  about:[{k:'ACTIVE',v:'2025 ~'},{k:'LIKES',v:'chess, writing'},{k:'NOTE',v:'slow replies'}],
  pair:{code:'C33 — C39',title:"King's Gambit Accepted",sub:'Kieseritzky Gambit'},
- chars:[{name:'Kai',side:'WHITE',photo:''},{name:'Ray',side:'BLACK',photo:''}],
+ chars:[{name:'Kai',hd:'Kai',photo:''},{name:'Ray',hd:'Ray',photo:''}],
  spec:[{k:'AGE',v:['27','26']},{k:'HEIGHT',v:['184cm','178cm']},{k:'BIRTHDAY',v:['14.03','02.09']},{k:'RATING',v:['2712 GM','2604 IM']},{k:'LIKES',v:['whisky, rainy days','late snacks']}],
- b1:[],b2:[],
  guide:[
   {t:'Intro',b:'They met over a chessboard and keep losing to each other.\n**Whoever wins keeps changing.**'},
   {t:'Relation',b:'rivals / roommates / old friends\n\nFirst they read each other\'s moves; later the moves said more than words.'},
@@ -304,87 +238,6 @@ const nm=i=>S.chars[i].name||'';
 const bandTxt=(p,auto)=>live()?`<span data-p="${p}" contenteditable="true">${esc(getp(S,p)||auto||'')}</span>`:`<span>${esc(getp(S,p)||auto||'')}</span>`;
 
 /* ---- pages ---- */
-/* ===================== BLOCKS (added after the fixed sections of each page) ===================== */
-const BT={
- txt:{n:'TEXT',d:'markdown paragraphs',v:['PLAIN','LEAD','TWO COLUMNS'],band:'TEXT',mk:()=>({md:'Write here. **Bold**, *italic* and ==highlight== work.\n\nA second paragraph.'})},
- list:{n:'LIST',d:'numbered rows',v:['BIG ROWS','COMPACT','CHECKLIST'],band:'LIST',mk:()=>({rows:[{t:'First',n:'A short note.',c:0},{t:'Second',n:'Another note.',c:0}]})},
- kv:{n:'KEY · VALUE',d:'profile facts',v:['ROWS','GRID'],band:'FACTS',mk:()=>({rows:[{k:'KEY',v:'value'},{k:'KEY',v:'value'}]})},
- quote:{n:'QUOTE',d:'pull quote',v:['BAR','CENTRED'],band:'QUOTE',mk:()=>({q:'A quotation goes here.',by:'Someone'})},
- image:{n:'IMAGE',d:'full width, any height, light and dark picture',v:['FULL WIDTH','FRAMED','WITH CAPTION'],band:'IMAGE',mk:()=>({src:'',srcD:'',h:260,mh:200,fx:50,fy:50,mfx:50,mfy:50,cap:'',sub:''})},
- pair:{n:'IMAGE PAIR',d:'two pictures',v:['SQUARE','WIDE'],band:'PICTURES',mk:()=>({a:{src:'',srcD:'',cap:''},b:{src:'',srcD:'',cap:''}})},
- links:{n:'LINKS',d:'where to go',v:['ROWS','BUTTONS'],band:'LINKS',mk:()=>({rows:[{t:'Label',u:'https://'}]})},
- chars:{n:'CHARACTERS',d:'compare table of the two characters',v:['COMPARE TABLE'],band:'CHARACTERS',mk:()=>({})},
- div:{n:'DIVIDER',d:'rules and space',v:['HAIRLINE','THICK','CHECKER','SPACE'],band:null,mk:()=>({})}
-};
-const bandCount=a=>(a||[]).filter(b=>BT[b.t]&&BT[b.t].band!==null).length;
-const BUI={pal:'',gear:'',tab:'d'};
-const imgPair=(u,uD)=>{const l=u||uD,k=uD||u;return l?`<img class="il" src="${esc(l)}" alt="" draggable="false"><img class="id" src="${esc(k)}" alt="" draggable="false">`:''};
-const bAttr=(pg,i,x='')=>`data-pg="${pg}" data-bi="${i}"${x}`;
-function blockBody(pg,i,b){const P=`b${pg}.${i}.d.`,d=b.d||{},L=live(),v=b.v||0;
- const rowCtl=(arr,r)=>L?`<span class="ctl bxrc"><button type="button" class="xb" data-bk="rmv" ${bAttr(pg,i,` data-r="${r}" data-d="-1"`)} ${r===0?'disabled':''}>↑</button><button type="button" class="xb" data-bk="rmv" ${bAttr(pg,i,` data-r="${r}" data-d="1"`)} ${r===arr.length-1?'disabled':''}>↓</button><button type="button" class="xb" data-bk="rdel" ${bAttr(pg,i,` data-r="${r}"`)}>×</button></span>`:'';
- const addRow=label=>L?`<button type="button" class="addb" data-bk="radd" ${bAttr(pg,i)}>+ ${label}</button>`:'';
- switch(b.t){
- case 'txt':{if(v===1&&!L){const parts=String(d.md||'').split(/\n\s*\n/);return`<div class="bx-lead md">${mdr(parts[0],true)}</div><div class="bx-txt md">${mdr(parts.slice(1).join('\n\n'))}</div>`}
-  return MDF(P+'md','bx-txt'+(v===2?' bx-cols':''))}
- case 'list':{const rows=d.rows||[];
-  if(v===2)return`<ul class="bx-ck">${rows.map((r,k)=>`<li class="${r.c?'d':''}"><i class="bx-cb" ${L?`data-bk="ck" role="button" ${bAttr(pg,i,` data-r="${k}"`)}`:''}></i><span>${T(P+`rows.${k}.t`,'','span','Item')}</span>${rowCtl(rows,k)}</li>`).join('')}</ul>${addRow('ADD ITEM')}`;
-  if(v===1)return`<ul class="bx-l2">${rows.map((r,k)=>`<li><em>${String(k+1).padStart(2,'0')}</em><span>${T(P+`rows.${k}.n`,'','span','Text')}</span>${rowCtl(rows,k)}</li>`).join('')}</ul>${addRow('ADD ROW')}`;
-  return`<div class="bx-rows">${rows.map((r,k)=>`<div class="bx-row"><div class="tt">${T(P+`rows.${k}.t`,'','span','Title')}</div>${rowCtl(rows,k)}<div class="nt">${T(P+`rows.${k}.n`,'','span','Note')}</div></div>`).join('')}</div>${addRow('ADD ROW')}`}
- case 'kv':{const rows=d.rows||[];
-  if(v===1)return`<div class="bx-kvg">${rows.map((r,k)=>`<div><span class="bk">${T(P+`rows.${k}.k`,'','span','KEY')}</span><b>${T(P+`rows.${k}.v`,'','span','value')}</b>${rowCtl(rows,k)}</div>`).join('')}</div>${addRow('ADD ROW')}`;
-  return`<dl class="bx-kv">${rows.map((r,k)=>`<div class="r"><dt>${T(P+`rows.${k}.k`,'','span','KEY')}</dt><dd>${T(P+`rows.${k}.v`,'','span','value')}${rowCtl(rows,k)}</dd></div>`).join('')}</dl>${addRow('ADD ROW')}`}
- case 'quote':return v===1?`<blockquote class="bx-q2">${T(P+'q','','span','Quotation')}<small>— ${T(P+'by','','span','Name')}</small></blockquote>`:`<blockquote class="bx-q1">${T(P+'q','','span','Quotation')}<small>— ${T(P+'by','','span','Name')}</small></blockquote>`;
- case 'links':{const rows=d.rows||[];
-  const lab=(r,k)=>`${T(P+`rows.${k}.t`,'','span','Label')} <span class="bxu">${T(P+`rows.${k}.u`,'','span','https://')}</span>`;
-  const href=r=>/^https?:\/\//i.test(r.u||'')?esc(r.u):'#';
-  return(v===1?`<div class="bx-lkb">${rows.map((r,k)=>L?`<span class="bxlk">${lab(r,k)}${rowCtl(rows,k)}</span>`:`<a href="${href(r)}" target="_blank" rel="noopener">${esc(r.t)} →</a>`).join('')}</div>`:`<div class="bx-lk">${rows.map((r,k)=>L?`<div class="bxlk">${lab(r,k)}${rowCtl(rows,k)}</div>`:`<a href="${href(r)}" target="_blank" rel="noopener"><b>${esc(r.t)}</b><span>↗</span></a>`).join('')}</div>`)+addRow('ADD LINK')}
- case 'image':{const h=d.h||260,mh=d.mh||h,box=`<div class="bx-im ${v===0?'full':v===1?'fr':''}" style="--h:${h}px;--mh:${mh}px;--fx:${d.fx??50}%;--fy:${d.fy??50}%;--mfx:${d.mfx??d.fx??50}%;--mfy:${d.mfy??d.fy??50}%">${imgPair(d.src,d.srcD)||'<span class="bx-no">NO IMAGE · open ⚙ to add one</span>'}</div>`;
-  const cap=(L||d.cap||d.sub)?`<div class="bx-cap"><div class="t">${T(P+'cap','','span','Caption')}</div><div class="s">${T(P+'sub','','span','Second line')}</div></div>`:'';
-  return v===2?`<div class="bx-sp2">${box}${cap}</div>`:box+(v===1?cap:'')}
- case 'pair':{const one=k=>{const x=d[k]||{},sq=v===0;return`<div class="bx-pi"><div class="bx-im fr ${sq?'sq':''}" style="--h:180px;--mh:140px">${imgPair(x.src,x.srcD)||'<span class="bx-no">NO IMAGE</span>'}</div><div class="bx-pc">${T(P+k+'.cap','','span','Caption')}</div></div>`};return`<div class="bx-pair">${one('a')}${one('b')}</div>`}
- case 'chars':{const C=S.chars,sp=S.spec;return`<div class="bx-cp">${C.map((c,k)=>`<div>${c.photo?`<div class="av"><img src="${esc(c.photo)}" alt="" draggable="false"><i></i><i></i><i></i><i></i></div>`:`<div class="av">${esc(c.ph||'PHOTO')}<i></i><i></i><i></i><i></i></div>`}<div class="pn">${esc(c.name||'')}</div><div class="pt"><i class="mkq${k?' k':''}"></i>${esc(c.side||'')}</div></div>`).join('')}</div><div class="bx-cmp"><div class="hd2"><span></span><span>${esc(String(C[0].name||'').toUpperCase())}</span><span>${esc(String(C[1].name||'').toUpperCase())}</span></div>${sp.map(r=>`<div class="cr"><dt>${esc(r.k)}</dt><dd>${esc((r.v||[])[0]||'')}</dd><dd>${esc((r.v||[])[1]||'')}</dd></div>`).join('')}</div>${L?'<p class="bxhint">Shows the two characters from page 2. Edit them there.</p>':''}`}
- case 'div':return v===0?'<hr class="bx-d1">':v===1?'<hr class="bx-d2">':v===2?'<div class="bx-d3"></div>':'<div class="bx-d4"></div>';
- }return''}
-function blockSettings(pg,i,b){const d=b.d,tab=BUI.tab,m=tab==='m',fx=m?(d.mfx??d.fx??50):(d.fx??50),fy=m?(d.mfy??d.fy??50):(d.fy??50),pic=d.src||d.srcD,hv=m?(d.mh||d.h||200):(d.h||260);
- return`<div class="bxpop"><h5>IMAGE SETTINGS</h5>
- <div class="bxtabs"><button type="button" class="${m?'':'on'}" data-bk="tab" data-t="d" ${bAttr(pg,i)}>DESKTOP</button><button type="button" class="${m?'on':''}" data-bk="tab" data-t="m" ${bAttr(pg,i)}>PHONE</button></div>
- <label>HEIGHT <b>${hv}px</b></label><input type="range" min="${m?100:120}" max="${m?500:600}" step="10" value="${hv}" data-bs="${m?'mh':'h'}" ${bAttr(pg,i)}>
- <label>WHERE IT IS CUT (click the picture)</label><div class="bxfx" data-bk="fx" ${bAttr(pg,i)}>${pic?`<img src="${esc(d.src||d.srcD)}" alt="" draggable="false"><i style="left:${fx}%;top:${fy}%"></i>`:'<span class="bx-no" style="position:static;padding:14px">add a picture first</span>'}</div>
- <label>PICTURES</label><div class="bxtwo"><label class="bxth"><span class="bxt">${d.src?`<img src="${esc(d.src)}" alt="">`:'<em>EMPTY</em>'}</span><b>LIGHT</b><input type="file" accept="image/*" hidden data-up="b${pg}.${i}.d.src"></label><label class="bxth"><span class="bxt">${d.srcD?`<img src="${esc(d.srcD)}" alt="">`:(d.src?`<img src="${esc(d.src)}" alt="" style="opacity:.45">`:'<em>EMPTY</em>')}</span><b>DARK</b><input type="file" accept="image/*" hidden data-up="b${pg}.${i}.d.srcD"></label></div>
- <p class="bxnote">Click a picture to upload. With no dark picture the light one is used in dark mode.${d.srcD?` <button type="button" class="xb" data-bk="clrd" ${bAttr(pg,i)}>REMOVE DARK</button>`:''}</p>
- <button type="button" class="xb bxdone" data-bk="gear" ${bAttr(pg,i)}>DONE</button></div>`}
-function pairSettings(pg,i,b){const d=b.d;const one=k=>{const x=d[k]||{};return`<div><label>PICTURE ${k.toUpperCase()}</label><div class="bxtwo"><label class="bxth"><span class="bxt">${x.src?`<img src="${esc(x.src)}" alt="">`:'<em>EMPTY</em>'}</span><b>LIGHT</b><input type="file" accept="image/*" hidden data-up="b${pg}.${i}.d.${k}.src"></label><label class="bxth"><span class="bxt">${x.srcD?`<img src="${esc(x.srcD)}" alt="">`:(x.src?`<img src="${esc(x.src)}" alt="" style="opacity:.45">`:'<em>EMPTY</em>')}</span><b>DARK</b><input type="file" accept="image/*" hidden data-up="b${pg}.${i}.d.${k}.srcD"></label></div></div>`};
- return`<div class="bxpop"><h5>PICTURES</h5>${one('a')}${one('b')}<p class="bxnote">Click a picture to upload. With no dark picture the light one is used in dark mode.</p><button type="button" class="xb bxdone" data-bk="gear" ${bAttr(pg,i)}>DONE</button></div>`}
-function blockTools(pg,i,b,n){const R=BT[b.t];return`<div class="bxtb ctl"><button type="button" data-bk="mv" ${bAttr(pg,i,' data-d="-1"')} title="Move up" ${i===0?'disabled':''}>↑</button><button type="button" data-bk="mv" ${bAttr(pg,i,' data-d="1"')} title="Move down" ${i===n-1?'disabled':''}>↓</button><i class="sp"></i>${R.v.length>1?`<button type="button" class="dsg" data-bk="ds" ${bAttr(pg,i)} title="Change design">DESIGN · ${R.v[b.v||0]}</button>`:`<span class="dsg">${R.v[0]}</span>`}${b.t==='image'||b.t==='pair'?`<button type="button" data-bk="gear" ${bAttr(pg,i)} title="Image settings">⚙</button>`:''}<i class="sp"></i><button type="button" data-bk="dup" ${bAttr(pg,i)} title="Duplicate">⧉</button><button type="button" data-bk="del" ${bAttr(pg,i)} title="Delete">✕</button></div>`}
-function blocksHtml(pg,start){const arr=S['b'+pg]||[];let n=start,h='';
- const add=i=>live()?`<div class="bxadd ctl"><button type="button" data-bk="add" ${bAttr(pg,i)}>+ ADD BLOCK</button></div>${BUI.pal===pg+':'+i?`<div class="bxpal ctl"><div class="gr">${Object.entries(BT).map(([k,R])=>`<button type="button" data-bk="new" data-t="${k}" ${bAttr(pg,i)}><b>${R.n}</b><small>${R.d}</small></button>`).join('')}</div></div>`:''}`:'';
- h+=add(0);
- arr.forEach((b,i)=>{const R=BT[b.t],body=blockBody(pg,i,b),tools=blockTools(pg,i,b,arr.length);
-  if(R.band===null)h+=`<div class="bxd blkx">${tools}${body}</div>`;
-  else{const gear=BUI.gear===pg+':'+i&&(b.t==='image'||b.t==='pair')?(b.t==='image'?blockSettings(pg,i,b):pairSettings(pg,i,b)):'';
-   h+=`<div class="blk blkx"><div class="bd"><span>${T(`b${pg}.${i}.band`,'','span',R.band)}</span><span class="no">MOVE ${n++}</span></div>${tools}<div class="bb bb-${b.t} v${b.v||0}">${body}</div>${gear}</div>`}
-  h+=add(i+1)});
- return h}
-app.addEventListener('click',e=>{const b=e.target.closest('[data-bk]');if(!b||!live())return;
- const k=b.dataset.bk,pg=+b.dataset.pg,i=+b.dataset.bi,arr=S['b'+pg],blk=arr&&arr[i];
- if(k==='add'){const key=pg+':'+i;BUI.pal=BUI.pal===key?'':key;paint();return}
- if(k==='new'){const t=b.dataset.t;arr.splice(i,0,{t,v:0,d:BT[t].mk()});BUI.pal='';paint();return}
- if(!blk)return;
- if(k==='mv'){const j=i+ +b.dataset.d;if(j>=0&&j<arr.length){[arr[i],arr[j]]=[arr[j],arr[i]];BUI.gear=''}paint();return}
- if(k==='ds'){blk.v=((blk.v||0)+1)%BT[blk.t].v.length;paint();return}
- if(k==='dup'){arr.splice(i+1,0,JSON.parse(JSON.stringify(blk)));paint();return}
- if(k==='del'){arr.splice(i,1);BUI.gear='';paint();return}
- if(k==='gear'){const key=pg+':'+i;BUI.gear=BUI.gear===key?'':key;paint();return}
- if(k==='tab'){BUI.tab=b.dataset.t;paint();return}
- if(k==='clrd'){blk.d.srcD='';paint();return}
- if(k==='fx'){const r=b.getBoundingClientRect(),x=Math.round(Math.max(0,Math.min(100,(e.clientX-r.left)/r.width*100))),y=Math.round(Math.max(0,Math.min(100,(e.clientY-r.top)/r.height*100)));if(BUI.tab==='m'){blk.d.mfx=x;blk.d.mfy=y}else{blk.d.fx=x;blk.d.fy=y}paint();return}
- if(k==='radd'){const t=blk.t,rows=blk.d.rows=blk.d.rows||[];rows.push(t==='kv'?{k:'KEY',v:'value'}:t==='links'?{t:'Label',u:'https://'}:{t:'New',n:'Text',c:0});paint();return}
- if(k==='rdel'){blk.d.rows.splice(+b.dataset.r,1);paint();return}
- if(k==='rmv'){const r=+b.dataset.r,j=r+ +b.dataset.d,rows=blk.d.rows;if(j>=0&&j<rows.length)[rows[r],rows[j]]=[rows[j],rows[r]];paint();return}
- if(k==='ck'){const r=blk.d.rows[+b.dataset.r];r.c=r.c?0:1;paint();return}
-});
-app.addEventListener('input',e=>{const r=e.target.closest&&e.target.closest('input[data-bs]');if(!r)return;const pg=+r.dataset.pg,i=+r.dataset.bi,blk=(S['b'+pg]||[])[i];if(!blk)return;blk.d[r.dataset.bs]=+r.value;
- const im=r.closest('.blkx').querySelector('.bx-im');if(im){const d=blk.d;im.style.setProperty('--h',(d.h||260)+'px');im.style.setProperty('--mh',(d.mh||d.h||200)+'px')}const lb=r.previousElementSibling;if(lb&&lb.tagName==='LABEL'){const bb=lb.querySelector('b');if(bb)bb.textContent=r.value+'px'}});
 function pageMe(an){
  const a=i=>an?` a" style="--i:${i}`:'"';
  const d=dday();
@@ -394,7 +247,7 @@ function pageMe(an){
  const about=S.about.map((r,i)=>`<div class="rw"><span class="n">${i+1}.${mv('about',i,S.about.length)}</span><div class="c"><span class="k"${live()?' contenteditable="true"':''} data-p="about.${i}.k">${esc(r.k)}</span>${MDF(`about.${i}.v`,'v',true)}</div></div>`).join('');
  return `<div class="W p1"><aside class="L${a(0)}"><div class="id">${photo('avatar','PHOTO')}<div>${T('name','nm','h1')}${T('handle','hdl','div')}</div></div>${MDF('bio','bio')}</aside>
  <section class="Rt"><div class="blk${a(1)}"><div class="bd"><span>${T('dday.label','','span','KGA')} #${esc(iso2dmy(S.dday.date))}</span><span class="no">MOVE 1</span></div><div class="rws"><div class="rw"><span class="n">1.</span><div class="c">${dblock}${dctl}</div></div></div></div>
- <div class="blk${a(2)}"><div class="bd">${bandTxt('bands.about','ABOUT')}<span class="no">MOVE 2</span></div><div class="rws">${about}</div><button class="addb" data-a="addabout">+ ADD ROW</button></div>${blocksHtml(1,3)}</section>
+ <div class="blk${a(2)}"><div class="bd">${bandTxt('bands.about','ABOUT')}<span class="no">MOVE 2</span></div><div class="rws">${about}</div><button class="addb" data-a="addabout">+ ADD ROW</button></div></section>
  ${foot(an,1)}</div>`}
 function titleBlock(){
  const P=S.pair,L=live();
@@ -403,18 +256,17 @@ function titleBlock(){
  const sb=(L||P.sub)?T('pair.sub','s','div','Subtitle'):'';
  return `${code}${title}${sb}`}
 function pagePair(an){
- const N1=2+bandCount(S.b1);
  const a=i=>an?` a" style="--i:${i}`:'"';
  const mv=(k,i,n)=>live()?`<br><span class="ctls ctl"><button type="button" class="xb" data-a="mv${k}" data-i="${i}" data-d="-1" aria-label="move up"${i===0?' disabled':''}>↑</button><button type="button" class="xb" data-a="mv${k}" data-i="${i}" data-d="1" aria-label="move down"${i===n-1?' disabled':''}>↓</button><button type="button" class="xb" data-a="rm${k}" data-i="${i}" aria-label="delete">×</button></span>`:'';
  const c0=nm(0),c1=nm(1),auto=`${U(c0)} & ${U(c1)} · CHARACTERS`;
  const spec=S.spec.map((r,i)=>`<div class="rw r3 sp3"><span class="n">${i+2}.${mv('spec',i,S.spec.length)}</span><div class="c"><span class="k"${live()?' contenteditable="true"':''} data-p="spec.${i}.k">${esc(r.k)}</span>${MDF(`spec.${i}.v.0`,'v',true)}</div><div class="c"><span class="k">${esc(r.k)}</span>${MDF(`spec.${i}.v.1`,'v',true)}</div></div>`).join('');
  const guide=S.guide.map((g,i)=>`<div class="rw"><span class="n">${i+1}.${mv('guide',i,S.guide.length)}</span><div class="c">${T(`guide.${i}.t`,'gh','h3','Title')}${MDF(`guide.${i}.b`,'gp')}</div></div>`).join('');
  return `<div class="W"><aside class="L pr${a(0)}"><div class="dg" role="img" aria-label="knight's jump diagram">${jumpSVG(ini(c0,'K'),ini(c1,'R'))}</div><div class="pt">${titleBlock()}</div></aside>
- <section class="Rt"><div class="blk rv${a(1)}" data-pin><div class="bd">${bandTxt('bands.chars',auto)}<span class="no"><span class="pin-mark">PINNED · </span>MOVE ${N1+1}</span></div><div class="rws">
-  <div class="hd3"><span>#</span><span>${sq(0)}${esc(U(c0))} · ${T('chars.0.side','','span','SIDE')}</span><span>${sq(1)}${esc(U(c1))} · ${T('chars.1.side','','span','SIDE')}</span></div>
+ <section class="Rt"><div class="blk rv${a(1)}" data-pin><div class="bd">${bandTxt('bands.chars',auto)}<span class="no"><span class="pin-mark">PINNED · </span>MOVE 3</span></div><div class="rws">
+  <div class="hd3"><span>#</span><span>${sq(0)}${T('chars.0.hd','','span','NAME')}</span><span>${sq(1)}${T('chars.1.hd','','span','NAME')}</span></div>
   <div class="rw r3"><span class="n">1.</span><div class="c pc">${photo('chars.0.photo',esc(S.chars[0].ph||'PHOTO'))}<div class="pn">${T('chars.0.name','')}</div>${live()?`<div class="phl"><span class="k">PHOTO TEXT</span>${T('chars.0.ph','v','div','PHOTO')}</div>`:''}</div><div class="c pc">${photo('chars.1.photo',esc(S.chars[1].ph||'PHOTO'))}<div class="pn">${T('chars.1.name','')}</div>${live()?`<div class="phl"><span class="k">PHOTO TEXT</span>${T('chars.1.ph','v','div','PHOTO')}</div>`:''}</div></div>
   <div class="drop"><div class="in">${spec}<button class="addb" data-a="addspec" style="margin:0 12px 10px;width:calc(100% - 24px)">+ ADD ROW</button></div></div></div></div>
- <div class="blk${a(2)}"><div class="bd">${bandTxt('bands.guide','PAIR GUIDE')}<span class="no">MOVE ${N1+2}</span></div><div class="rws">${guide}</div><button class="addb" data-a="addguide">+ ADD SECTION</button></div>${blocksHtml(2,N1+3)}</section>
+ <div class="blk${a(2)}"><div class="bd">${bandTxt('bands.guide','PAIR GUIDE')}<span class="no">MOVE 4</span></div><div class="rws">${guide}</div><button class="addb" data-a="addguide">+ ADD SECTION</button></div></section>
  ${foot(an,2)}</div>`}
 function foot(an,n){
  const a=an?` a" style="--i:6`:'';
@@ -436,11 +288,10 @@ function flash(m,ms=2500){$('#ebm').textContent=m;clearTimeout(ft);ft=setTimeout
 /* ---- load / save ---- */
 const upgrade=d=>{
  const D0=DEF(),o={...D0,...d};
- o.b1=Array.isArray(d.b1)?d.b1.filter(b=>b&&BT[b.t]):[];o.b2=Array.isArray(d.b2)?d.b2.filter(b=>b&&BT[b.t]):[];
  o.pair={...D0.pair,...(d.pair||{})};
  if(o.pair.subCode){const sc=String(o.pair.subCode).trim(),cd=String(o.pair.code||'').trim();o.pair.code=cd?(cd.includes(sc)?cd:cd+' — '+sc):sc}
  delete o.pair.subCode;o.dday={...D0.dday,...(d.dday||{})};o.bands={...D0.bands,...(d.bands||{})};o.ui={...D0.ui,...(d.ui||{})};
- o.chars=[0,1].map(i=>({...D0.chars[i],...((d.chars||[])[i]||{})}));
+ o.chars=[0,1].map(i=>{const sv=(d.chars||[])[i]||{},c={...D0.chars[i],...sv};if(sv.hd===undefined)c.hd=c.name;return c}); // header-row name is its own field (copied once from the name for old data)
  if(!Array.isArray(o.guide)){ // older versions stored intro / tags / relation / notes
   const g=d.guide||{};o.guide=[{t:'Intro',b:g.intro||''},{t:'Relation',b:[(g.tags||[]).join(' / '),g.relation||''].filter(Boolean).join('\n\n')},{t:'Notes',b:(g.notes||[]).map(x=>'- '+x).join('\n')}]}
  return o};
@@ -533,34 +384,5 @@ window.addEventListener('hashchange',route);
   try{const {data:{session}}=await sb.auth.getSession();logged=!!session;await load()}catch(err){console.error(err)}
  }
  route();
-})();
-
-/* ---- floating edit tools: bold / italic / strike / highlight styles / link / quote / list / clear ---- */
-(()=>{const TB=document.createElement('div');TB.id='tb';TB.hidden=true;
- TB.innerHTML='<button type="button" data-t="b" title="Bold (Ctrl/Cmd+B)"><b>B</b></button><button type="button" data-t="i" title="Italic (Ctrl/Cmd+I)"><i>I</i></button><button type="button" data-t="s" title="Strikethrough"><s>S</s></button><i class="tsep"></i><button type="button" data-t="hl" class="thl" title="Highlight styles">HL</button><i class="tsep"></i><button type="button" data-t="a" title="Link">↗</button><button type="button" data-t="q" title="Quote">“</button><button type="button" data-t="l" title="List">≡</button><i class="tsep"></i><button type="button" data-t="x" title="Remove formatting">✕</button><div class="tbh" hidden>'+[1,2,3,4,5,6].map(n=>`<button type="button" data-h="${n}" title="Highlight style ${n}"><span class="md"><mark class="h${n}">Aa</mark></span></button>`).join('')+'<button type="button" data-h="0" title="No highlight">∅</button></div>';
- document.body.appendChild(TB);
- const el=n=>n&&(n.nodeType===1?n:n.parentElement);
- const field=()=>{const s=getSelection();if(!live()||!s.rangeCount||s.isCollapsed)return null;const a=el(s.anchorNode),f=el(s.focusNode),m=a&&a.closest('.ml[data-md]');return m&&f&&f.closest('.ml[data-md]')===m?m:null};
- const txtOff=(root,node,off)=>{const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n,c=0;while(n=w.nextNode()){if(n===node)return c+off;c+=n.nodeValue.length}return c};
- const setSel=(root,a,b)=>{const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n,c=0,sn,so,en,eo;while(n=w.nextNode()){const l=n.nodeValue.length;if(sn===undefined&&a<=c+l){sn=n;so=a-c}if(en===undefined&&b<=c+l){en=n;eo=b-c;break}c+=l}if(sn&&en){const r=document.createRange();r.setStart(sn,so);r.setEnd(en,eo);const s=getSelection();s.removeAllRanges();s.addRange(r)}};
- const place=()=>{const m=field();if(!m){TB.hidden=true;TB.querySelector('.tbh').hidden=true;TB.querySelector('.thl').classList.remove('on');return}
-  const r=getSelection().getRangeAt(0).getBoundingClientRect();TB.hidden=false;const w=TB.offsetWidth,h=TB.offsetHeight;let x=r.left+r.width/2-w/2,y=r.top-h-8;if(y<6)y=r.bottom+8;x=Math.max(6,Math.min(innerWidth-w-6,x));TB.style.left=x+'px';TB.style.top=y+'px'};
- const apply=(t,h)=>{const m=field();if(!m)return;const sel=getSelection(),txt=sel.toString();if(!txt)return;const rg=sel.getRangeAt(0),start=txtOff(m,rg.startContainer,rg.startOffset);let out=txt;
-  const wrap=(a,b)=>txt.length>a.length+b.length&&txt.startsWith(a)&&txt.endsWith(b)?txt.slice(a.length,txt.length-b.length):a+txt+b;
-  if(t==='b')out=wrap('**','**');
-  else if(t==='i')out=(txt.length>2&&txt.startsWith('*')&&!txt.startsWith('**')&&txt.endsWith('*')&&!txt.endsWith('**'))?txt.slice(1,-1):'*'+txt+'*';
-  else if(t==='s')out=wrap('~~','~~');
-  else if(h!==undefined){const hm=/^==(?:\{([1-6])\})?([\s\S]+)==$/.exec(txt),inner=hm?hm[2]:txt;out=h===0?inner:'=='+(h>1?'{'+h+'}':'')+inner+'=='}
-  else if(t==='a'){const u=prompt('Link URL','https://');if(!u)return;out='['+txt+']('+u+')'}
-  else if(t==='q')out=txt.split('\n').map(l=>l.startsWith('> ')?l.slice(2):'> '+l).join('\n');
-  else if(t==='l')out=txt.split('\n').map(l=>/^- /.test(l)?l.slice(2):'- '+l).join('\n');
-  else if(t==='x')out=txt.replace(/\*\*|~~|==(?:\{[1-6]\})?/g,'').replace(/^(>|-)\s/gm,'');
-  else return;
-  document.execCommand('insertText',false,out);setSel(m,start,start+out.length);requestAnimationFrame(place)};
- TB.addEventListener('mousedown',e=>e.preventDefault());
- TB.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.h!==undefined){apply('hl',+b.dataset.h);return}if(b.dataset.t==='hl'){const h=TB.querySelector('.tbh');h.hidden=!h.hidden;b.classList.toggle('on',!h.hidden);requestAnimationFrame(place);return}apply(b.dataset.t)});
- document.addEventListener('selectionchange',()=>requestAnimationFrame(place));
- addEventListener('scroll',()=>{if(!TB.hidden)place()},{passive:true});addEventListener('resize',place);
- document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&!e.shiftKey&&!e.altKey&&field()){const k=e.key.toLowerCase();if(k==='b'||k==='i'){e.preventDefault();apply(k)}}});
 })();
 </script></body></html>

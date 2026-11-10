@@ -260,7 +260,8 @@ const DEF=()=>({
  ui:{pair:'PAIR',me:'ME'},
  about:[{k:'ACTIVE',v:'2025 ~'},{k:'LIKES',v:'chess, writing'},{k:'NOTE',v:'slow replies'}],
  pair:{code:'C33 — C39',title:"King's Gambit Accepted",sub:'Kieseritzky Gambit'},
- chars:[{name:'Kai',side:'WHITE',photo:''},{name:'Ray',side:'BLACK',photo:''}],
+ chars:[{name:'Kai',hn:'Kai',side:'WHITE',photo:''},{name:'Ray',hn:'Ray',side:'BLACK',photo:''}],
+ hide:{},
  spec:[{k:'AGE',v:['27','26']},{k:'HEIGHT',v:['184cm','178cm']},{k:'BIRTHDAY',v:['14.03','02.09']},{k:'RATING',v:['2712 GM','2604 IM']},{k:'LIKES',v:['whisky, rainy days','late snacks']}],
  b1:[],b2:[],
  guide:[
@@ -385,7 +386,7 @@ function titleBlock(){
  const sb=(L||P.sub)?T('pair.sub','s','div','Subtitle'):'';
  return `${code}${title}${sb}`}
 function pagePair(an){
- const N1=2+bandCount(S.b1);
+ const N1=2+bandCount(S.b1),gHide=!!(S.hide&&S.hide.guide);
  const a=i=>an?` a" style="--i:${i}`:'"';
  const mv=(k,i,n)=>live()?`<br><span class="ctls ctl"><button type="button" class="xb" data-a="mv${k}" data-i="${i}" data-d="-1" aria-label="move up"${i===0?' disabled':''}>↑</button><button type="button" class="xb" data-a="mv${k}" data-i="${i}" data-d="1" aria-label="move down"${i===n-1?' disabled':''}>↓</button><button type="button" class="xb" data-a="rm${k}" data-i="${i}" aria-label="delete">×</button></span>`:'';
  const c0=nm(0),c1=nm(1),auto=`${U(c0)} & ${U(c1)} · CHARACTERS`;
@@ -393,10 +394,10 @@ function pagePair(an){
  const guide=S.guide.map((g,i)=>`<div class="rw"><span class="n">${i+1}.${mv('guide',i,S.guide.length)}</span><div class="c">${T(`guide.${i}.t`,'gh','h3','Title')}${MDF(`guide.${i}.b`,'gp')}</div></div>`).join('');
  return `<div class="W"><aside class="L pr${a(0)}"><div class="dg" role="img" aria-label="knight's jump diagram">${jumpSVG(ini(c0,'K'),ini(c1,'R'))}</div><div class="pt">${titleBlock()}</div></aside>
  <section class="Rt"><div class="blk rv${a(1)}" data-pin><div class="bd">${bandTxt('bands.chars',auto)}<span class="no"><span class="pin-mark">PINNED · </span>MOVE ${N1+1}</span></div><div class="rws">
-  <div class="hd3"><span>#</span><span>${sq(0)}${esc(U(c0))} · ${T('chars.0.side','','span','SIDE')}</span><span>${sq(1)}${esc(U(c1))} · ${T('chars.1.side','','span','SIDE')}</span></div>
+  <div class="hd3"><span>#</span><span>${sq(0)}${T('chars.0.hn','','span','NAME')}</span><span>${sq(1)}${T('chars.1.hn','','span','NAME')}</span></div>
   <div class="rw r3"><span class="n">1.</span><div class="c pc">${photo('chars.0.photo',esc(S.chars[0].ph||'PHOTO'))}<div class="pn">${T('chars.0.name','')}</div>${live()?`<div class="phl"><span class="k">PHOTO TEXT</span>${T('chars.0.ph','v','div','PHOTO')}</div>`:''}</div><div class="c pc">${photo('chars.1.photo',esc(S.chars[1].ph||'PHOTO'))}<div class="pn">${T('chars.1.name','')}</div>${live()?`<div class="phl"><span class="k">PHOTO TEXT</span>${T('chars.1.ph','v','div','PHOTO')}</div>`:''}</div></div>
   <div class="drop"><div class="in">${spec}<button class="addb" data-a="addspec" style="margin:0 12px 10px;width:calc(100% - 24px)">+ ADD ROW</button></div></div></div></div>
- <div class="blk${a(2)}"><div class="bd">${bandTxt('bands.guide','PAIR GUIDE')}<span class="no">MOVE ${N1+2}</span></div><div class="rws">${guide}</div><button class="addb" data-a="addguide">+ ADD SECTION</button></div>${blocksHtml(2,N1+3)}</section>
+ ${gHide?`<button class="addb" data-a="showguide" style="margin:0 0 14px">+ RESTORE PAIR GUIDE BLOCK</button>`:`<div class="blk${a(2)}" style="position:relative"><div class="bxtb ctl"><button type="button" data-a="hideguide" title="Delete block">✕</button></div><div class="bd">${bandTxt('bands.guide','PAIR GUIDE')}<span class="no">MOVE ${N1+2}</span></div><div class="rws">${guide}</div><button class="addb" data-a="addguide">+ ADD SECTION</button></div>`}${blocksHtml(2,N1+(gHide?2:3))}</section>
  ${foot(an,2)}</div>`}
 function foot(an,n){
  const a=an?` a" style="--i:6`:'';
@@ -422,7 +423,7 @@ const upgrade=d=>{
  o.pair={...D0.pair,...(d.pair||{})};
  if(o.pair.subCode){const sc=String(o.pair.subCode).trim(),cd=String(o.pair.code||'').trim();o.pair.code=cd?(cd.includes(sc)?cd:cd+' — '+sc):sc}
  delete o.pair.subCode;o.dday={...D0.dday,...(d.dday||{})};o.bands={...D0.bands,...(d.bands||{})};o.ui={...D0.ui,...(d.ui||{})};
- o.chars=[0,1].map(i=>({...D0.chars[i],...((d.chars||[])[i]||{})}));
+ o.chars=[0,1].map(i=>{const c={...D0.chars[i],...((d.chars||[])[i]||{})};if(c.hn===undefined)c.hn=c.name||'';return c});o.hide={...(d.hide||{})};
  if(!Array.isArray(o.guide)){ // older versions stored intro / tags / relation / notes
   const g=d.guide||{};o.guide=[{t:'Intro',b:g.intro||''},{t:'Relation',b:[(g.tags||[]).join(' / '),g.relation||''].filter(Boolean).join('\n\n')},{t:'Notes',b:(g.notes||[]).map(x=>'- '+x).join('\n')}]}
  return o};
@@ -460,6 +461,8 @@ app.addEventListener('click',e=>{
   else if(a==='rmspec')S.spec.splice(i,1);
   else if(a==='addguide')S.guide.push({t:'Title',b:'Text'});
   else if(a==='rmguide')S.guide.splice(i,1);
+  else if(a==='hideguide'){if(!confirm('Delete the PAIR GUIDE block? (you can restore it afterwards)'))return;(S.hide=S.hide||{}).guide=true}
+  else if(a==='showguide'){(S.hide=S.hide||{}).guide=false}
   else if(a==='ddmode')S.dday.mode=S.dday.mode==='until'?'since':'until';
   paint();return}
  if(live())return;

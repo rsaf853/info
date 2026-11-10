@@ -99,10 +99,14 @@ label.av{cursor:pointer}
 .pn{display:flex;align-items:center;gap:8px;margin-top:9px;font:800 18px/1.05 var(--sans);letter-spacing:-.05em}
 .rw .av{width:100%;height:auto;aspect-ratio:1/1;max-width:170px}
 .pc{cursor:pointer}
-.drop{display:grid;grid-template-rows:0fr;transition:grid-template-rows .36s cubic-bezier(.3,.8,.2,1)}
+.drop{display:grid;grid-template-rows:0fr;transition:grid-template-rows .6s cubic-bezier(.3,.8,.2,1)}
 .drop>.in{overflow:hidden;min-height:0}
 .rv:hover .drop,.rv.pin .drop{grid-template-rows:1fr}
 .edit:not(.prev) .drop{grid-template-rows:1fr}
+/* open animation: rows drop in one by one */
+.drop .sp3{opacity:0;transform:translateY(-10px);transition:opacity .5s cubic-bezier(.3,.8,.2,1),transform .5s cubic-bezier(.3,.8,.2,1)}
+.rv:hover .drop .sp3,.rv.pin .drop .sp3{opacity:1;transform:none;transition-delay:calc(.2s + var(--i,0)*.11s)}
+.edit:not(.prev) .drop .sp3{opacity:1;transform:none;transition:none}
 .gh{margin:0 0 3px;font:800 15px/1.2 var(--sans);letter-spacing:-.04em;display:block}
 .gp{color:var(--mut);font-size:12px;line-height:1.65;word-break:keep-all;letter-spacing:-.03em}
 .gp strong,.gp mark{color:var(--fg)}
@@ -391,7 +395,7 @@ function pagePair(an){
  const a=i=>an?` a" style="--i:${i}`:'"';
  const mv=(k,i,n)=>live()?`<br><span class="ctls ctl"><button type="button" class="xb" data-a="mv${k}" data-i="${i}" data-d="-1" aria-label="move up"${i===0?' disabled':''}>↑</button><button type="button" class="xb" data-a="mv${k}" data-i="${i}" data-d="1" aria-label="move down"${i===n-1?' disabled':''}>↓</button><button type="button" class="xb" data-a="rm${k}" data-i="${i}" aria-label="delete">×</button></span>`:'';
  const c0=nm(0),c1=nm(1),auto=`${U(c0)} & ${U(c1)} · CHARACTERS`;
- const spec=S.spec.map((r,i)=>`<div class="rw r3 sp3"><span class="n">${i+2}.${mv('spec',i,S.spec.length)}</span><div class="c"><span class="k"${live()?' contenteditable="true"':''} data-p="spec.${i}.k">${esc(r.k)}</span>${MDF(`spec.${i}.v.0`,'v',true)}</div><div class="c"><span class="k">${esc(r.k)}</span>${MDF(`spec.${i}.v.1`,'v',true)}</div></div>`).join('');
+ const spec=S.spec.map((r,i)=>`<div class="rw r3 sp3" style="--i:${i}"><span class="n">${i+2}.${mv('spec',i,S.spec.length)}</span><div class="c"><span class="k"${live()?' contenteditable="true"':''} data-p="spec.${i}.k">${esc(r.k)}</span>${MDF(`spec.${i}.v.0`,'v',true)}</div><div class="c"><span class="k">${esc(r.k)}</span>${MDF(`spec.${i}.v.1`,'v',true)}</div></div>`).join('');
  const guide=S.guide.map((g,i)=>`<div class="rw"><span class="n">${i+1}.${mv('guide',i,S.guide.length)}</span><div class="c">${T(`guide.${i}.t`,'gh','h3','Title')}${MDF(`guide.${i}.b`,'gp')}</div></div>`).join('');
  return `<div class="W"><aside class="L pr${a(0)}"><div class="dg" role="img" aria-label="knight's jump diagram">${jumpSVG(ini(c0,'K'),ini(c1,'R'))}</div><div class="pt">${titleBlock()}</div></aside>
  <section class="Rt"><div class="blk rv${a(1)}" data-pin><div class="bd">${bandTxt('bands.chars',auto)}<span class="no"><span class="pin-mark">PINNED · </span>MOVE ${N1+1}</span></div><div class="rws">

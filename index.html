@@ -108,7 +108,7 @@ label.av{cursor:pointer}
 .gp strong,.gp mark{color:var(--fg)}
 
 /* footer */
-.ft{display:flex;justify-content:space-between;align-items:center;padding:4px 4px 0;border-top:2px solid var(--fg);margin-top:24px}
+.ft{display:flex;justify-content:space-between;align-items:center;padding:0 4px;margin-top:0}
 .nx{display:inline-flex;align-items:center;gap:8px;padding:11px 0;font:600 10px var(--sans);letter-spacing:.12em;cursor:pointer;text-transform:uppercase;transition:padding .25s cubic-bezier(.3,.8,.2,1),background .18s,color .18s}
 .nx:hover{background:var(--fg);color:var(--bg);padding-left:12px;padding-right:12px}
 .lg{border:0;background:none;padding:6px;margin:-6px;font:500 11px var(--sans);letter-spacing:0;color:var(--fg);opacity:.14;cursor:pointer;transition:opacity .2s}.lg:hover,.lg:focus-visible{opacity:.5}
@@ -369,6 +369,7 @@ function blocksHtml(pg,start){const arr=S['b'+pg]||[];let n=start,h='';
   h+=add(i+1)});
  return h}
 function pageMe(an){
+ const aHide=!!(S.hide&&S.hide.about);
  const a=i=>an?` a" style="--i:${i}`:'"';
  const d=dday();
  const dblock=d?`<div class="dd"><span class="fn" style="--p:${d.pct||0}%" aria-label="${d.n} days">#${d.n}</span></div>${d.sub}`:'<div class="v" style="color:var(--mut)">—</div>';
@@ -377,7 +378,7 @@ function pageMe(an){
  const about=S.about.map((r,i)=>`<div class="rw"><span class="n">${i+1}.${mv('about',i,S.about.length)}</span><div class="c"><span class="k"${live()?' contenteditable="true"':''} data-p="about.${i}.k">${esc(r.k)}</span>${MDF(`about.${i}.v`,'v',true)}</div></div>`).join('');
  return `<div class="W p1"><aside class="L${a(0)}"><div class="id">${photo('avatar','PHOTO')}<div>${T('name','nm','h1')}${T('handle','hdl','div')}</div></div>${MDF('bio','bio')}</aside>
  <section class="Rt"><div class="blk${a(1)}"><div class="bd"><span>${T('dday.label','','span','KGA')} #${esc(iso2dmy(S.dday.date))}</span><span class="no">MOVE 1</span></div><div class="rws"><div class="rw"><span class="n">1.</span><div class="c">${dblock}${dctl}</div></div></div></div>
- <div class="blk${a(2)}"><div class="bd">${bandTxt('bands.about','ABOUT')}<span class="no">MOVE 2</span></div><div class="rws">${about}</div><button class="addb" data-a="addabout">+ ADD ROW</button></div>${blocksHtml(1,3)}</section>
+ ${aHide?`<button class="addb" data-a="showabout" style="margin:0 0 14px">+ RESTORE ABOUT BLOCK</button>`:`<div class="blk${a(2)}" style="position:relative"><div class="bxtb ctl"><button type="button" data-a="hideabout" title="Delete block">✕</button></div><div class="bd">${bandTxt('bands.about','ABOUT')}<span class="no">MOVE 2</span></div><div class="rws">${about}</div><button class="addb" data-a="addabout">+ ADD ROW</button></div>`}${blocksHtml(1,aHide?2:3)}</section>
  ${foot(an,1)}</div>`}
 function titleBlock(){
  const P=S.pair,L=live();
@@ -461,6 +462,8 @@ app.addEventListener('click',e=>{
   else if(a==='rmspec')S.spec.splice(i,1);
   else if(a==='addguide')S.guide.push({t:'Title',b:'Text'});
   else if(a==='rmguide')S.guide.splice(i,1);
+  else if(a==='hideabout'){if(!confirm('Delete the ABOUT block? (you can restore it afterwards)'))return;(S.hide=S.hide||{}).about=true}
+  else if(a==='showabout'){(S.hide=S.hide||{}).about=false}
   else if(a==='hideguide'){if(!confirm('Delete the PAIR GUIDE block? (you can restore it afterwards)'))return;(S.hide=S.hide||{}).guide=true}
   else if(a==='showguide'){(S.hide=S.hide||{}).guide=false}
   else if(a==='ddmode')S.dday.mode=S.dday.mode==='until'?'since':'until';
@@ -510,6 +513,20 @@ $('#pv').onclick=()=>{preview=!preview;paint()};
 $('#ex').onclick=async()=>{S=DEF();await load();editing=false;preview=false;paint()};
 $('#lo').onclick=async()=>{if(sb)await sb.auth.signOut();logged=false;editing=false;preview=false;S=DEF();await load();paint()};
 window.addEventListener('hashchange',route);
+/* ---- swipe to switch page (left: next, right: back) ---- */
+(()=>{let x0=0,y0=0,t0=0,ok=false;
+ const skip=t=>t&&t.closest&&t.closest('input,textarea,select,[contenteditable="true"],[contenteditable="plaintext-only"],.lgf,#tbar,.tbh');
+ document.addEventListener('touchstart',e=>{
+  if(e.touches.length!==1||skip(e.target)||(getSelection()&&String(getSelection()).length)){ok=false;return}
+  const t=e.touches[0];x0=t.clientX;y0=t.clientY;t0=Date.now();ok=true},{passive:true});
+ document.addEventListener('touchend',e=>{
+  if(!ok)return;ok=false;
+  const t=e.changedTouches[0],dx=t.clientX-x0,dy=t.clientY-y0;
+  if(Date.now()-t0>700||Math.abs(dx)<60||Math.abs(dx)<Math.abs(dy)*1.5)return;
+  if(dx<0&&page===1)location.hash='#/pair';
+  else if(dx>0&&page===2)location.hash='#/';
+ },{passive:true});
+})();
 
 /* ---- start ---- */
 (async()=>{

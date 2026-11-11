@@ -194,7 +194,7 @@ label.av{cursor:pointer}
 .bx-txt{font:400 14.5px/1.75 var(--sans)}.bx-txt p{margin:0 0 .7em}.bx-cols{column-count:2;column-gap:28px}
 .bx-lead{font:700 21px/1.4 var(--sans);letter-spacing:-.05em;margin:0 0 12px;word-break:keep-all}
 .bx-rows{counter-reset:bn}.bx-row{counter-increment:bn;display:grid;grid-template-columns:28px 1fr auto;padding:14px 0;border-top:1px solid var(--line);align-items:baseline}.bx-row:first-child{border-top:0}
-.bx-row::before{content:counter(bn);font:600 14px/1 var(--sans);color:var(--mut)}.bx-row .tt{font:900 26px/1.1 var(--sans);letter-spacing:-.065em}.bx-row .nt{grid-column:2;color:var(--mut);font-size:13px;margin-top:4px}
+.bx-row::before{content:counter(bn);font:600 14px/1 var(--sans);color:var(--mut)}.bx-row .tt{font:900 19px/1.15 var(--sans);letter-spacing:-.065em}.bx-row .nt{grid-column:2;color:var(--mut);font-size:13px;margin-top:4px}
 .bx-l2,.bx-ck{margin:0;padding:0;list-style:none}.bx-l2 li{display:grid;grid-template-columns:34px 1fr auto;padding:9px 0;border-top:1px solid var(--line);font-size:14px}.bx-l2 li:first-child{border-top:0}.bx-l2 em{font:700 10px/2 var(--sans);letter-spacing:.1em;font-style:normal;color:var(--mut)}
 .bx-ck li{display:flex;gap:10px;padding:7px 0;border-top:1px solid var(--line);align-items:center}.bx-ck li:first-child{border-top:0}.bx-cb{width:13px;height:13px;border:1.5px solid var(--fg);flex:none;display:block}.bx-ck li.d .bx-cb{background:var(--fg)}.bx-ck li.d>span{color:var(--mut);text-decoration:line-through}.edit:not(.prev) .bx-cb{cursor:pointer}
 .bx-kv{margin:0}.bx-kv .r{display:grid;grid-template-columns:110px 1fr;padding:9px 0;border-top:1px solid var(--line);align-items:baseline}.bx-kv .r:first-child{border-top:0}.bx-kv dt{font:700 10px var(--sans);letter-spacing:.12em;color:var(--mut)}.bx-kv dd{margin:0;font:800 19px/1.2 var(--sans);letter-spacing:-.05em}
@@ -219,7 +219,7 @@ label.av{cursor:pointer}
 .bxhint{margin:10px 0 0;font:500 11px var(--sans);color:var(--mut)}
 .bxd{margin:0 0 14px;position:relative}
 .bxrc{margin-left:8px;gap:2px}
-.bxtb{position:absolute;right:8px;top:-12px;z-index:5;display:none;background:var(--fg);color:var(--bg);box-shadow:0 5px 14px rgba(0,0,0,.25)}
+.blk.nob>.bxtb{top:8px}.bxtb{position:absolute;right:8px;top:-12px;z-index:5;display:none;background:var(--fg);color:var(--bg);box-shadow:0 5px 14px rgba(0,0,0,.25)}
 .edit:not(.prev) .bxtb{display:flex}
 .bxtb button,.bxtb .dsg{height:26px;min-width:26px;padding:0 8px;display:grid;place-items:center;font:700 11px var(--sans);letter-spacing:.06em;color:var(--bg);border:0;background:none;cursor:pointer}.bxtb .dsg{font-size:10px;letter-spacing:.1em}
 .bxtb button:hover{background:var(--bg);color:var(--fg)}.bxtb button:disabled{opacity:.35;pointer-events:none}.bxtb .sp{width:1px;background:currentColor;opacity:.3;margin:5px 2px}
@@ -323,7 +323,8 @@ const BT={
  chars:{n:'CHARACTERS',d:'compare table of the two characters',v:['COMPARE TABLE'],band:'CHARACTERS',mk:()=>({})},
  div:{n:'DIVIDER',d:'rules and space',v:['HAIRLINE','THICK','CHECKER','SPACE'],band:null,mk:()=>({})}
 };
-const bandCount=a=>(a||[]).filter(b=>BT[b.t]&&BT[b.t].band!==null).length;
+const noBand=b=>b.t==='image'&&!(b.v||0);
+const bandCount=a=>(a||[]).filter(b=>BT[b.t]&&BT[b.t].band!==null&&!noBand(b)).length;
 const BUI={pal:'',gear:'',tab:'d'};
 const imgPair=(u,uD)=>{const l=u||uD,k=uD||u;return l?`<img class="il" src="${esc(l)}" alt="" draggable="false"><img class="id" src="${esc(k)}" alt="" draggable="false">`:''};
 const bAttr=(pg,i,x='')=>`data-pg="${pg}" data-bi="${i}"${x}`;
@@ -369,7 +370,7 @@ function blocksHtml(pg,start){const arr=S['b'+pg]||[];let n=start,h='';
  arr.forEach((b,i)=>{const R=BT[b.t],body=blockBody(pg,i,b),tools=blockTools(pg,i,b,arr.length);
   if(R.band===null)h+=`<div class="bxd blkx">${tools}${body}</div>`;
   else{const gear=BUI.gear===pg+':'+i&&(b.t==='image'||b.t==='pair')?(b.t==='image'?blockSettings(pg,i,b):pairSettings(pg,i,b)):'';
-   h+=`<div class="blk blkx"><div class="bd"><span>${T(`b${pg}.${i}.band`,'','span',R.band)}</span><span class="no">MOVE ${n++}</span></div>${tools}<div class="bb bb-${b.t} v${b.v||0}">${body}</div>${gear}</div>`}
+   const nb=noBand(b);h+=`<div class="blk blkx${nb?' nob':''}">${nb?'':`<div class="bd"><span>${T(`b${pg}.${i}.band`,'','span',R.band)}</span><span class="no">MOVE ${n++}</span></div>`}${tools}<div class="bb bb-${b.t} v${b.v||0}">${body}</div>${gear}</div>`}
   h+=add(i+1)});
  return h}
 function pageMe(an){

@@ -219,7 +219,7 @@ label.av{cursor:pointer}
 .bxhint{margin:10px 0 0;font:500 11px var(--sans);color:var(--mut)}
 .bxd{margin:0 0 14px;position:relative}
 .bxrc{margin-left:8px;gap:2px}
-.blk.nob>.bxtb{top:8px}.bxtb{position:absolute;right:8px;top:-12px;z-index:5;display:none;background:var(--fg);color:var(--bg);box-shadow:0 5px 14px rgba(0,0,0,.25)}
+.blk.nob>.bxtb{top:8px}.blk.fx{position:relative}.bxtb{position:absolute;right:8px;top:-12px;z-index:5;display:none;background:var(--fg);color:var(--bg);box-shadow:0 5px 14px rgba(0,0,0,.25)}
 .edit:not(.prev) .bxtb{display:flex}
 .bxtb button,.bxtb .dsg{height:26px;min-width:26px;padding:0 8px;display:grid;place-items:center;font:700 11px var(--sans);letter-spacing:.06em;color:var(--bg);border:0;background:none;cursor:pointer}.bxtb .dsg{font-size:10px;letter-spacing:.1em}
 .bxtb button:hover{background:var(--bg);color:var(--fg)}.bxtb button:disabled{opacity:.35;pointer-events:none}.bxtb .sp{width:1px;background:currentColor;opacity:.3;margin:5px 2px}
@@ -267,7 +267,7 @@ const DEF=()=>({
  chars:[{name:'Kai',hn:'Kai',side:'WHITE',photo:''},{name:'Ray',hn:'Ray',side:'BLACK',photo:''}],
  hide:{},
  spec:[{k:'AGE',v:['27','26']},{k:'HEIGHT',v:['184cm','178cm']},{k:'BIRTHDAY',v:['14.03','02.09']},{k:'RATING',v:['2712 GM','2604 IM']},{k:'LIKES',v:['whisky, rainy days','late snacks']}],
- b1:[],b2:[],
+ b1:[{t:'fx_dday',v:0},{t:'fx_about',v:0}],b2:[{t:'fx_chars',v:0},{t:'fx_guide',v:0}],
  guide:[
   {t:'Intro',b:'They met over a chessboard and keep losing to each other.\n**Whoever wins keeps changing.**'},
   {t:'Relation',b:'rivals / roommates / old friends\n\nFirst they read each other\'s moves; later the moves said more than words.'},
@@ -321,10 +321,17 @@ const BT={
  pair:{n:'IMAGE PAIR',d:'two pictures',v:['SQUARE','WIDE'],band:'PICTURES',mk:()=>({a:{src:'',srcD:'',cap:''},b:{src:'',srcD:'',cap:''}})},
  links:{n:'LINKS',d:'where to go',v:['ROWS','BUTTONS'],band:'LINKS',mk:()=>({rows:[{t:'Label',u:'https://'}]})},
  chars:{n:'CHARACTERS',d:'compare table of the two characters',v:['COMPARE TABLE'],band:'CHARACTERS',mk:()=>({})},
+ fx_dday:{n:'D-DAY',fx:1,band:'D-DAY',v:['-'],mk:()=>({})},
+ fx_about:{n:'ABOUT',fx:1,band:'ABOUT',v:['-'],mk:()=>({})},
+ fx_chars:{n:'CHARACTERS',fx:1,band:'CHARACTERS',v:['-'],mk:()=>({})},
+ fx_guide:{n:'PAIR GUIDE',fx:1,band:'PAIR GUIDE',v:['-'],mk:()=>({})},
  div:{n:'DIVIDER',d:'rules and space',v:['HAIRLINE','THICK','CHECKER','SPACE'],band:null,mk:()=>({})}
 };
 const noBand=b=>b.t==='image'&&!(b.v||0);
-const bandCount=a=>(a||[]).filter(b=>BT[b.t]&&BT[b.t].band!==null&&!noBand(b)).length;
+const fxHidden=b=>!!(S.hide&&((b.t==='fx_about'&&S.hide.about)||(b.t==='fx_guide'&&S.hide.guide)));
+let FXR={};
+const fxTools=(pg,i,b,n)=>`<div class="bxtb ctl"><button type="button" data-bk="mv" ${bAttr(pg,i,' data-d="-1"')} title="Move up" ${i===0?'disabled':''}>↑</button><button type="button" data-bk="mv" ${bAttr(pg,i,' data-d="1"')} title="Move down" ${i===n-1?'disabled':''}>↓</button>${b.t==='fx_about'||b.t==='fx_guide'?`<i class="sp"></i><button type="button" data-a="${b.t==='fx_about'?'hideabout':'hideguide'}" title="Delete block">✕</button>`:''}</div>`;
+const bandCount=a=>(a||[]).filter(b=>BT[b.t]&&BT[b.t].band!==null&&!noBand(b)&&!fxHidden(b)).length;
 const BUI={pal:'',gear:'',tab:'d'};
 const imgPair=(u,uD)=>{const l=u||uD,k=uD||u;return l?`<img class="il" src="${esc(l)}" alt="" draggable="false"><img class="id" src="${esc(k)}" alt="" draggable="false">`:''};
 const bAttr=(pg,i,x='')=>`data-pg="${pg}" data-bi="${i}"${x}`;
@@ -364,10 +371,12 @@ function blockSettings(pg,i,b){const d=b.d,tab=BUI.tab,m=tab==='m',fx=m?(d.mfx??
 function pairSettings(pg,i,b){const d=b.d;const one=k=>{const x=d[k]||{};return`<div><label>PICTURE ${k.toUpperCase()}</label><div class="bxtwo"><label class="bxth"><span class="bxt">${x.src?`<img src="${esc(x.src)}" alt="">`:'<em>EMPTY</em>'}</span><b>LIGHT</b><input type="file" accept="image/*" hidden data-up="b${pg}.${i}.d.${k}.src"></label><label class="bxth"><span class="bxt">${x.srcD?`<img src="${esc(x.srcD)}" alt="">`:(x.src?`<img src="${esc(x.src)}" alt="" style="opacity:.45">`:'<em>EMPTY</em>')}</span><b>DARK</b><input type="file" accept="image/*" hidden data-up="b${pg}.${i}.d.${k}.srcD"></label></div></div>`};
  return`<div class="bxpop"><h5>PICTURES</h5>${one('a')}${one('b')}<p class="bxnote">Click a picture to upload. With no dark picture the light one is used in dark mode.</p><button type="button" class="xb bxdone" data-bk="gear" ${bAttr(pg,i)}>DONE</button></div>`}
 function blockTools(pg,i,b,n){const R=BT[b.t];return`<div class="bxtb ctl"><button type="button" data-bk="mv" ${bAttr(pg,i,' data-d="-1"')} title="Move up" ${i===0?'disabled':''}>↑</button><button type="button" data-bk="mv" ${bAttr(pg,i,' data-d="1"')} title="Move down" ${i===n-1?'disabled':''}>↓</button><i class="sp"></i>${R.v.length>1?`<button type="button" class="dsg" data-bk="ds" ${bAttr(pg,i)} title="Change design">DESIGN · ${R.v[b.v||0]}</button>`:`<span class="dsg">${R.v[0]}</span>`}${b.t==='image'||b.t==='pair'?`<button type="button" data-bk="gear" ${bAttr(pg,i)} title="Image settings">⚙</button>`:''}<i class="sp"></i><button type="button" data-bk="dup" ${bAttr(pg,i)} title="Duplicate">⧉</button><button type="button" data-bk="del" ${bAttr(pg,i)} title="Delete">✕</button></div>`}
-function blocksHtml(pg,start){const arr=S['b'+pg]||[];let n=start,h='';
- const add=i=>live()?`<div class="bxadd ctl"><button type="button" data-bk="add" ${bAttr(pg,i)}>+ ADD BLOCK</button></div>${BUI.pal===pg+':'+i?`<div class="bxpal ctl"><div class="gr">${Object.entries(BT).map(([k,R])=>`<button type="button" data-bk="new" data-t="${k}" ${bAttr(pg,i)}><b>${R.n}</b><small>${R.d}</small></button>`).join('')}</div></div>`:''}`:'';
+function blocksHtml(pg,start,an){const arr=S['b'+pg]||[];let n=start,h='';
+ const add=i=>live()?`<div class="bxadd ctl"><button type="button" data-bk="add" ${bAttr(pg,i)}>+ ADD BLOCK</button></div>${BUI.pal===pg+':'+i?`<div class="bxpal ctl"><div class="gr">${Object.entries(BT).filter(([k,R])=>!R.fx).map(([k,R])=>`<button type="button" data-bk="new" data-t="${k}" ${bAttr(pg,i)}><b>${R.n}</b><small>${R.d}</small></button>`).join('')}</div></div>`:''}`:'';
  h+=add(0);
- arr.forEach((b,i)=>{const R=BT[b.t],body=blockBody(pg,i,b),tools=blockTools(pg,i,b,arr.length);
+ arr.forEach((b,i)=>{const R=BT[b.t];
+  if(R.fx){h+=FXR[b.t](n,i,fxTools(pg,i,b,arr.length));if(!fxHidden(b))n++;h+=add(i+1);return}
+  const body=blockBody(pg,i,b),tools=blockTools(pg,i,b,arr.length);
   if(R.band===null)h+=`<div class="bxd blkx">${tools}${body}</div>`;
   else{const gear=BUI.gear===pg+':'+i&&(b.t==='image'||b.t==='pair')?(b.t==='image'?blockSettings(pg,i,b):pairSettings(pg,i,b)):'';
    const nb=noBand(b);h+=`<div class="blk blkx${nb?' nob':''}">${nb?'':`<div class="bd"><span>${T(`b${pg}.${i}.band`,'','span',R.band)}</span><span class="no">MOVE ${n++}</span></div>`}${tools}<div class="bb bb-${b.t} v${b.v||0}">${body}</div>${gear}</div>`}
@@ -381,9 +390,12 @@ function pageMe(an){
  const dctl=`<div class="ddc"><input type="text" inputmode="numeric" placeholder="DD.MM.YYYY" data-dd="date" value="${esc(iso2dmy(S.dday.date))}"><button type="button" data-a="ddmode">${S.dday.mode==='until'?'UNTIL':'SINCE'}</button></div>`;
  const mv=(k,i,n)=>live()?`<br><span class="ctls ctl"><button type="button" class="xb" data-a="mv${k}" data-i="${i}" data-d="-1" aria-label="move up"${i===0?' disabled':''}>↑</button><button type="button" class="xb" data-a="mv${k}" data-i="${i}" data-d="1" aria-label="move down"${i===n-1?' disabled':''}>↓</button><button type="button" class="xb" data-a="rm${k}" data-i="${i}" aria-label="delete">×</button></span>`:'';
  const about=S.about.map((r,i)=>`<div class="rw"><span class="n">${i+1}.${mv('about',i,S.about.length)}</span><div class="c"><span class="k"${live()?' contenteditable="true"':''} data-p="about.${i}.k">${esc(r.k)}</span>${MDF(`about.${i}.v`,'v',true)}</div></div>`).join('');
+ FXR={
+  fx_dday:(no,i,tl)=>`<div class="blk fx${a(i+1)}">${tl}<div class="bd"><span>${T('dday.label','','span','KGA')} #${esc(iso2dmy(S.dday.date))}</span><span class="no">MOVE ${no}</span></div><div class="rws"><div class="rw"><span class="n">1.</span><div class="c">${dblock}${dctl}</div></div></div></div>`,
+  fx_about:(no,i,tl)=>aHide?`<button class="addb" data-a="showabout" style="margin:0 0 14px">+ RESTORE ABOUT BLOCK</button>`:`<div class="blk fx${a(i+1)}">${tl}<div class="bd">${bandTxt('bands.about','ABOUT')}<span class="no">MOVE ${no}</span></div><div class="rws">${about}</div><button class="addb" data-a="addabout">+ ADD ROW</button></div>`
+ };
  return `<div class="W p1"><aside class="L${a(0)}"><div class="id">${photo('avatar','PHOTO')}<div>${T('name','nm','h1')}${T('handle','hdl','div')}</div></div>${MDF('bio','bio')}</aside>
- <section class="Rt"><div class="blk${a(1)}"><div class="bd"><span>${T('dday.label','','span','KGA')} #${esc(iso2dmy(S.dday.date))}</span><span class="no">MOVE 1</span></div><div class="rws"><div class="rw"><span class="n">1.</span><div class="c">${dblock}${dctl}</div></div></div></div>
- ${aHide?`<button class="addb" data-a="showabout" style="margin:0 0 14px">+ RESTORE ABOUT BLOCK</button>`:`<div class="blk${a(2)}" style="position:relative"><div class="bxtb ctl"><button type="button" data-a="hideabout" title="Delete block">✕</button></div><div class="bd">${bandTxt('bands.about','ABOUT')}<span class="no">MOVE 2</span></div><div class="rws">${about}</div><button class="addb" data-a="addabout">+ ADD ROW</button></div>`}${blocksHtml(1,aHide?2:3)}</section>
+ <section class="Rt">${blocksHtml(1,1,an)}</section>
  ${foot(an,1)}</div>`}
 function titleBlock(){
  const P=S.pair,L=live();
@@ -392,18 +404,21 @@ function titleBlock(){
  const sb=(L||P.sub)?T('pair.sub','s','div','Subtitle'):'';
  return `${code}${title}${sb}`}
 function pagePair(an){
- const N1=2+bandCount(S.b1),gHide=!!(S.hide&&S.hide.guide);
+ const gHide=!!(S.hide&&S.hide.guide);
  const a=i=>an?` a" style="--i:${i}`:'"';
  const mv=(k,i,n)=>live()?`<br><span class="ctls ctl"><button type="button" class="xb" data-a="mv${k}" data-i="${i}" data-d="-1" aria-label="move up"${i===0?' disabled':''}>↑</button><button type="button" class="xb" data-a="mv${k}" data-i="${i}" data-d="1" aria-label="move down"${i===n-1?' disabled':''}>↓</button><button type="button" class="xb" data-a="rm${k}" data-i="${i}" aria-label="delete">×</button></span>`:'';
  const c0=nm(0),c1=nm(1),auto=`${U(c0)} & ${U(c1)} · CHARACTERS`;
  const spec=S.spec.map((r,i)=>`<div class="rw r3 sp3" style="--i:${i}"><span class="n">${i+2}.${mv('spec',i,S.spec.length)}</span><div class="c"><span class="k"${live()?' contenteditable="true"':''} data-p="spec.${i}.k">${esc(r.k)}</span>${MDF(`spec.${i}.v.0`,'v',true)}</div><div class="c"><span class="k">${esc(r.k)}</span>${MDF(`spec.${i}.v.1`,'v',true)}</div></div>`).join('');
  const guide=S.guide.map((g,i)=>`<div class="rw"><span class="n">${i+1}.${mv('guide',i,S.guide.length)}</span><div class="c">${T(`guide.${i}.t`,'gh','h3','Title')}${MDF(`guide.${i}.b`,'gp')}</div></div>`).join('');
- return `<div class="W"><aside class="L pr${a(0)}"><div class="dg" role="img" aria-label="knight's jump diagram">${jumpSVG(ini(c0,'K'),ini(c1,'R'))}</div><div class="pt">${titleBlock()}</div></aside>
- <section class="Rt"><div class="blk rv${a(1)}" data-pin><div class="bd">${bandTxt('bands.chars',auto)}<span class="no"><span class="pin-mark">PINNED · </span>MOVE ${N1+1}</span></div><div class="rws">
+ FXR={
+  fx_chars:(no,i,tl)=>`<div class="blk rv fx${a(i+1)}" data-pin>${tl}<div class="bd">${bandTxt('bands.chars',auto)}<span class="no"><span class="pin-mark">PINNED · </span>MOVE ${no}</span></div><div class="rws">
   <div class="hd3"><span>#</span><span>${sq(0)}${T('chars.0.hn','','span','NAME')}</span><span>${sq(1)}${T('chars.1.hn','','span','NAME')}</span></div>
   <div class="rw r3"><span class="n">1.</span><div class="c pc">${photo('chars.0.photo',esc(S.chars[0].ph||'PHOTO'))}<div class="pn">${T('chars.0.name','')}</div>${live()?`<div class="phl"><span class="k">PHOTO TEXT</span>${T('chars.0.ph','v','div','PHOTO')}</div>`:''}</div><div class="c pc">${photo('chars.1.photo',esc(S.chars[1].ph||'PHOTO'))}<div class="pn">${T('chars.1.name','')}</div>${live()?`<div class="phl"><span class="k">PHOTO TEXT</span>${T('chars.1.ph','v','div','PHOTO')}</div>`:''}</div></div>
-  <div class="drop"><div class="in">${spec}<button class="addb" data-a="addspec" style="margin:0 12px 10px;width:calc(100% - 24px)">+ ADD ROW</button></div></div></div></div>
- ${gHide?`<button class="addb" data-a="showguide" style="margin:0 0 14px">+ RESTORE PAIR GUIDE BLOCK</button>`:`<div class="blk${a(2)}" style="position:relative"><div class="bxtb ctl"><button type="button" data-a="hideguide" title="Delete block">✕</button></div><div class="bd">${bandTxt('bands.guide','PAIR GUIDE')}<span class="no">MOVE ${N1+2}</span></div><div class="rws">${guide}</div><button class="addb" data-a="addguide">+ ADD SECTION</button></div>`}${blocksHtml(2,N1+(gHide?2:3))}</section>
+  <div class="drop"><div class="in">${spec}<button class="addb" data-a="addspec" style="margin:0 12px 10px;width:calc(100% - 24px)">+ ADD ROW</button></div></div></div></div>`,
+  fx_guide:(no,i,tl)=>gHide?`<button class="addb" data-a="showguide" style="margin:0 0 14px">+ RESTORE PAIR GUIDE BLOCK</button>`:`<div class="blk fx${a(i+1)}">${tl}<div class="bd">${bandTxt('bands.guide','PAIR GUIDE')}<span class="no">MOVE ${no}</span></div><div class="rws">${guide}</div><button class="addb" data-a="addguide">+ ADD SECTION</button></div>`
+ };
+ return `<div class="W"><aside class="L pr${a(0)}"><div class="dg" role="img" aria-label="knight's jump diagram">${jumpSVG(ini(c0,'K'),ini(c1,'R'))}</div><div class="pt">${titleBlock()}</div></aside>
+ <section class="Rt">${blocksHtml(2,1+bandCount(S.b1),an)}</section>
  ${foot(an,2)}</div>`}
 function foot(an,n){
  const a=an?` a" style="--i:6`:'';
@@ -426,6 +441,8 @@ function flash(m,ms=2500){$('#ebm').textContent=m;clearTimeout(ft);ft=setTimeout
 const upgrade=d=>{
  const D0=DEF(),o={...D0,...d};
  o.b1=Array.isArray(d.b1)?d.b1.filter(b=>b&&BT[b.t]):[];o.b2=Array.isArray(d.b2)?d.b2.filter(b=>b&&BT[b.t]):[];
+ const fxm=(arr,ts)=>{const have=new Set(arr.map(b=>b.t));return[...ts.filter(t=>!have.has(t)).map(t=>({t,v:0})),...arr]};
+ o.b1=fxm(o.b1,['fx_dday','fx_about']);o.b2=fxm(o.b2,['fx_chars','fx_guide']);
  o.pair={...D0.pair,...(d.pair||{})};
  if(o.pair.subCode){const sc=String(o.pair.subCode).trim(),cd=String(o.pair.code||'').trim();o.pair.code=cd?(cd.includes(sc)?cd:cd+' — '+sc):sc}
  delete o.pair.subCode;o.dday={...D0.dday,...(d.dday||{})};o.bands={...D0.bands,...(d.bands||{})};o.ui={...D0.ui,...(d.ui||{})};

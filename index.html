@@ -175,6 +175,8 @@ label.av{cursor:pointer}
 .nxa{display:inline-grid;place-items:center;min-width:22px;height:20px;border:1px solid var(--fg);font-size:11px}.nxa:hover{background:var(--fg);color:var(--bg)}
 .pfr>.c.pf{padding:0}.pfr .av{width:100%;max-width:none;height:auto;aspect-ratio:1/1}.pfr .av i{display:none}
 .pfr.one>.c.pf{grid-column:2/4}.pfr.one .av{aspect-ratio:2/1}
+/* with a picture the cell takes the picture's own shape (no cropping); empty cells keep the placeholder shape */
+.pfr{align-items:start}.pfr .av:has(img){aspect-ratio:auto;display:block}.pfr .av img{position:static;display:block;width:100%;height:auto}
 .pmc{display:none;gap:4px;padding:8px 12px;border-bottom:1px solid var(--line);flex-wrap:wrap}.edit:not(.prev) .pmc{display:flex}.pmc .xb.on{background:var(--fg);color:var(--bg)}
 @media(min-width:760px){.L.pr .dg{width:112px;margin-bottom:16px}.pt .l{font-size:10px}.pt .t{font-size:21px}.pt .s{font-size:12px}}
 

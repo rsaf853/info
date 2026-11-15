@@ -414,7 +414,7 @@ function blocksHtml(pg,start,an){const arr=S['b'+pg]||[];let n=start,h='';
   const body=blockBody(pg,i,b),tools=blockTools(pg,i,b,arr.length);
   if(R.band===null)h+=`<div class="bxd blkx">${tools}${body}</div>`;
   else{const gear=BUI.gear===pg+':'+i&&(b.t==='image'||b.t==='pair')?(b.t==='image'?blockSettings(pg,i,b):pairSettings(pg,i,b)):'';
-   const nb=noBand(b);h+=`<div class="blk blkx${nb?' nob':''}">${nb?'':`<div class="bd"><span>${T(`b${pg}.${i}.band`,'','span',R.band)}</span><span class="no">MOVE ${n++}</span></div>`}${tools}<div class="bb bb-${b.t} v${b.v||0}">${body}</div>${gear}</div>`}
+   const nb=noBand(b);h+=`<div class="blk blkx${nb?' nob':''}">${nb?'':`<div class="bd"><span>${T(`b${pg}.${i}.band`,'','span',R.band)}</span></div>`}${tools}<div class="bb bb-${b.t} v${b.v||0}">${body}</div>${gear}</div>`}
   h+=add(i+1)});
  return h}
 function pageMe(an){
@@ -426,8 +426,8 @@ function pageMe(an){
  const mv=(k,i,n)=>live()?`<br><span class="ctls ctl"><button type="button" class="xb" data-a="mv${k}" data-i="${i}" data-d="-1" aria-label="move up"${i===0?' disabled':''}>↑</button><button type="button" class="xb" data-a="mv${k}" data-i="${i}" data-d="1" aria-label="move down"${i===n-1?' disabled':''}>↓</button><button type="button" class="xb" data-a="rm${k}" data-i="${i}" aria-label="delete">×</button></span>`:'';
  const about=S.about.map((r,i)=>`<div class="rw"><span class="n">${i+1}.${mv('about',i,S.about.length)}</span><div class="c"><span class="k"${live()?' contenteditable="true"':''} data-p="about.${i}.k">${esc(r.k)}</span>${MDF(`about.${i}.v`,'v',true)}</div></div>`).join('');
  FXR={
-  fx_dday:(no,i,tl)=>`<div class="blk fx${a(i+1)}">${tl}<div class="bd"><span>${T('dday.label','','span','KGA')} #${esc(iso2dmy(S.dday.date))}</span><span class="no">MOVE ${no}</span></div><div class="rws"><div class="rw"><span class="n">1.</span><div class="c">${dblock}${dctl}</div></div></div></div>`,
-  fx_about:(no,i,tl)=>aHide?`<button class="addb" data-a="showabout" style="margin:0 0 14px">+ RESTORE ABOUT BLOCK</button>`:`<div class="blk fx${a(i+1)}">${tl}<div class="bd">${bandTxt('bands.about','ABOUT')}<span class="no">MOVE ${no}</span></div><div class="rws">${about}</div><button class="addb" data-a="addabout">+ ADD ROW</button></div>`
+  fx_dday:(no,i,tl)=>`<div class="blk fx${a(i+1)}">${tl}<div class="bd"><span>${T('dday.label','','span','KGA')} #${esc(iso2dmy(S.dday.date))}</span></div><div class="rws"><div class="rw"><span class="n">1.</span><div class="c">${dblock}${dctl}</div></div></div></div>`,
+  fx_about:(no,i,tl)=>aHide?`<button class="addb" data-a="showabout" style="margin:0 0 14px">+ RESTORE ABOUT BLOCK</button>`:`<div class="blk fx${a(i+1)}">${tl}<div class="bd">${bandTxt('bands.about','ABOUT')}</div><div class="rws">${about}</div><button class="addb" data-a="addabout">+ ADD ROW</button></div>`
  };
  return `<div class="W p1"><aside class="L${a(0)}"><div class="id">${photo('avatar','PHOTO')}<div>${T('name','nm','h1')}${T('handle','hdl','div')}</div></div>${MDF('bio','bio')}</aside>
  <section class="Rt">${blocksHtml(1,1,an)}</section>
@@ -448,11 +448,11 @@ function pagePair(an,pg){
  const guide=B.guide.map((g,i)=>`<div class="rw"><span class="n">${i+1}.${mv('guide',i,B.guide.length)}</span><div class="c">${T(`${F}guide.${i}.t`,'gh','h3','Title')}${MDF(`${F}guide.${i}.b`,'gp')}</div></div>`).join('');
  const card=k=>`<div class="c pc">${photo(`${F}chars.${k}.photo`,esc(B.chars[k].ph||'PHOTO'))}<div class="pn">${T(`${F}chars.${k}.name`,'')}</div>${live()?`<div class="phl"><span class="k">PHOTO TEXT</span>${T(`${F}chars.${k}.ph`,'v','div','PHOTO')}</div>`:''}</div>`;
  FXR={
-  fx_chars:(no,i,tl)=>`<div class="blk rv fx${a(i+1)}" data-pin>${tl}<div class="bd">${bandTxt(F+'bands.chars',auto)}<span class="no"><span class="pin-mark">PINNED · </span>MOVE ${no}</span></div><div class="rws">
+  fx_chars:(no,i,tl)=>`<div class="blk rv fx${a(i+1)}" data-pin>${tl}<div class="bd">${bandTxt(F+'bands.chars',auto)}<span class="no"><span class="pin-mark">PINNED</span></span></div><div class="rws">
   <div class="hd3"><span>#</span><span>${sq(0)}${T(F+'chars.0.hn','','span','NAME')}</span><span>${sq(1)}${T(F+'chars.1.hn','','span','NAME')}</span></div>
   <div class="rw r3"><span class="n">1.</span>${card(0)}${card(1)}</div>
   <div class="drop"><div class="in">${spec}<button class="addb" data-a="addspec" style="margin:0 12px 10px;width:calc(100% - 24px)">+ ADD ROW</button></div></div></div></div>`,
-  fx_guide:(no,i,tl)=>gHide?`<button class="addb" data-a="showguide" style="margin:0 0 14px">+ RESTORE PAIR GUIDE BLOCK</button>`:`<div class="blk fx${a(i+1)}">${tl}<div class="bd">${bandTxt(F+'bands.guide','PAIR GUIDE')}<span class="no">MOVE ${no}</span></div><div class="rws">${guide}</div><button class="addb" data-a="addguide">+ ADD SECTION</button></div>`
+  fx_guide:(no,i,tl)=>gHide?`<button class="addb" data-a="showguide" style="margin:0 0 14px">+ RESTORE PAIR GUIDE BLOCK</button>`:`<div class="blk fx${a(i+1)}">${tl}<div class="bd">${bandTxt(F+'bands.guide','PAIR GUIDE')}</div><div class="rws">${guide}</div><button class="addb" data-a="addguide">+ ADD SECTION</button></div>`
  };
  const dk=DIAG[B.pair.diag]?B.pair.diag:'knight';
  const dgc=live()?`<button type="button" class="xb dgb ctl" data-a="diag" title="Change diagram">◇ ${esc(DIAG[dk].n)} · ${DKEYS.indexOf(dk)+1}/${DKEYS.length}</button>`:'';

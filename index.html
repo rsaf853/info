@@ -91,7 +91,9 @@ label.av{cursor:pointer}
 .dd{display:flex;align-items:baseline;gap:4px;font-variant-numeric:tabular-nums}
 .dd small{font:800 20px var(--sans);color:var(--mut);letter-spacing:-.03em}
 /* D-DAY: outlined numerals that fill from the bottom as the next 100-day mark gets closer */
-.dd .fn{font:900 clamp(56px,17vw,66px)/.95 var(--sans);letter-spacing:-.06em;color:transparent;-webkit-text-stroke:1.5px var(--fg);background:linear-gradient(var(--fg),var(--fg)) 0 100%/100% var(--p,0%) no-repeat;-webkit-background-clip:text;background-clip:text;display:inline-block;padding-right:.04em}
+/* outlined numerals use the static Black cut: the variable font has overlapping strokes (4, #) that show up as lines inside the outline */
+@font-face{font-family:"Pretendard Static";font-weight:900;font-display:swap;src:url(https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-Black.woff2) format("woff2")}
+.dd .fn{font:900 clamp(56px,17vw,66px)/.95 "Pretendard Static",var(--sans);letter-spacing:-.06em;color:transparent;-webkit-text-stroke:1.5px var(--fg);background:linear-gradient(var(--fg),var(--fg)) 0 100%/100% var(--p,0%) no-repeat;-webkit-background-clip:text;background-clip:text;display:inline-block;padding-right:.04em}
 .dm{display:flex;justify-content:space-between;margin-top:6px;font:500 11px var(--sans);color:var(--mut);text-transform:uppercase;letter-spacing:.04em}.dm b{color:var(--fg);font-weight:600}
 .hd3{display:grid;grid-template-columns:30px 1fr 1fr;border-bottom:1px solid var(--fg);font:600 9px var(--sans);letter-spacing:.12em;text-transform:uppercase}
 .hd3>span{padding:6px 12px;display:flex;gap:6px;align-items:center;min-width:0}.hd3>span+span{border-left:1px solid var(--line)}

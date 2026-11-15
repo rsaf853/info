@@ -173,6 +173,9 @@ label.av{cursor:pointer}
 .dgb{display:none;margin:8px 0 12px;font-size:9.5px}.edit:not(.prev) .dgb{display:inline-block}
 .nx.nxe{cursor:default;gap:6px}.nx.nxe:hover{background:none;color:inherit;padding-left:0;padding-right:0}
 .nxa{display:inline-grid;place-items:center;min-width:22px;height:20px;border:1px solid var(--fg);font-size:11px}.nxa:hover{background:var(--fg);color:var(--bg)}
+.pfr>.c.pf{padding:0}.pfr .av{width:100%;max-width:none;height:auto;aspect-ratio:1/1}.pfr .av i{display:none}
+.pfr.one>.c.pf{grid-column:2/4}.pfr.one .av{aspect-ratio:2/1}
+.pmc{display:none;gap:4px;padding:8px 12px;border-bottom:1px solid var(--line);flex-wrap:wrap}.edit:not(.prev) .pmc{display:flex}.pmc .xb.on{background:var(--fg);color:var(--bg)}
 @media(min-width:760px){.L.pr .dg{width:112px;margin-bottom:16px}.pt .l{font-size:10px}.pt .t{font-size:21px}.pt .s{font-size:12px}}
 
 /* ---------- highlight styles (==text== is style 1; =={2}text== … =={6}text==) ---------- */
@@ -270,9 +273,11 @@ const DEF=()=>({
  bands:{about:'ABOUT',chars:'',guide:'PAIR GUIDE'},
  ui:{pair:'PAIR',me:'ME',pair2:'PAIR 2'},
  about:[{k:'ACTIVE',v:'2025 ~'},{k:'LIKES',v:'chess, writing'},{k:'NOTE',v:'slow replies'}],
+ photoMode:'classic',photoAll:'',
  pair:{code:'C33 — C39',title:"King's Gambit Accepted",sub:'Kieseritzky Gambit',mv:'',diag:'knight'},
  /* page 3: second pair page, same structure as page 2 with its own data */
  p3:{
+  photoMode:'split',photoAll:'',
   pair:{code:'B90 — B99',title:'Sicilian Defence',sub:'Najdorf Variation',mv:'1.e4 c5 2.Nf3 d6 3.d4 cxd4 4.Nxd4 Nf6 5.Nc3 a6',diag:'a6'},
   bands:{chars:'',guide:'PAIR GUIDE'},
   chars:[{name:'Noah',hn:'Noah',side:'WHITE',photo:''},{name:'Dex',hn:'Dex',side:'BLACK',photo:''}],
@@ -343,6 +348,7 @@ const PB=pg=>pg===3?S.p3:S;
 const PF=pg=>pg===3?'p3.':'';
 const HB=pg=>(pg===3?S.p3.hide:S.hide)||{};
 const HASH=['#/','#/pair','#/pair2'];
+const PM=['classic','split','one'],PMN={classic:'PHOTO + NAME',split:'TWO PHOTOS',one:'ONE PHOTO'};
 const bandTxt=(p,auto)=>live()?`<span data-p="${p}" contenteditable="true">${esc(getp(S,p)||auto||'')}</span>`:`<span>${esc(getp(S,p)||auto||'')}</span>`;
 
 /* ---- pages ---- */
@@ -447,10 +453,18 @@ function pagePair(an,pg){
  const spec=B.spec.map((r,i)=>`<div class="rw r3 sp3" style="--i:${i}"><span class="n">${i+2}.${mv('spec',i,B.spec.length)}</span><div class="c"><span class="k"${live()?' contenteditable="true"':''} data-p="${F}spec.${i}.k">${esc(r.k)}</span>${MDF(`${F}spec.${i}.v.0`,'v',true)}</div><div class="c"><span class="k">${esc(r.k)}</span>${MDF(`${F}spec.${i}.v.1`,'v',true)}</div></div>`).join('');
  const guide=B.guide.map((g,i)=>`<div class="rw"><span class="n">${i+1}.${mv('guide',i,B.guide.length)}</span><div class="c">${T(`${F}guide.${i}.t`,'gh','h3','Title')}${MDF(`${F}guide.${i}.b`,'gp')}</div></div>`).join('');
  const card=k=>`<div class="c pc">${photo(`${F}chars.${k}.photo`,esc(B.chars[k].ph||'PHOTO'))}<div class="pn">${T(`${F}chars.${k}.name`,'')}</div>${live()?`<div class="phl"><span class="k">PHOTO TEXT</span>${T(`${F}chars.${k}.ph`,'v','div','PHOTO')}</div>`:''}</div>`;
+ /* character photos: classic (photo + name), split (two photos filling the row), one (one big photo across both) */
+ const pm=PM.includes(B.photoMode)?B.photoMode:'classic';
+ const fill=(p,ph)=>`<div class="c pf">${photo(p,ph)}</div>`;
+ const nameRow=()=>live()?`<div class="rw r3 pnm"><span class="n"></span>${[0,1].map(k=>`<div class="c"><span class="k">NAME</span>${T(`${F}chars.${k}.name`,'v','div','Name')}</div>`).join('')}</div>`:'';
+ const pmBtn=live()?`<div class="pmc ctl">${PM.map(m=>`<button type="button" class="xb${m===pm?' on':''}" data-a="pmode" data-m="${m}">${PMN[m]}</button>`).join('')}</div>`:'';
+ const photoRow=()=>pmBtn+(pm==='classic'?`<div class="rw r3"><span class="n">1.</span>${card(0)}${card(1)}</div>`
+  :pm==='split'?`<div class="rw r3 pfr"><span class="n">1.</span>${fill(`${F}chars.0.photo`,esc(B.chars[0].ph||'PHOTO'))}${fill(`${F}chars.1.photo`,esc(B.chars[1].ph||'PHOTO'))}</div>${nameRow()}`
+  :`<div class="rw r3 pfr one"><span class="n">1.</span>${fill(`${F}photoAll`,'PHOTO')}</div>${nameRow()}`);
  FXR={
   fx_chars:(no,i,tl)=>`<div class="blk rv fx${a(i+1)}" data-pin>${tl}<div class="bd">${bandTxt(F+'bands.chars',auto)}<span class="no"><span class="pin-mark">PINNED</span></span></div><div class="rws">
   <div class="hd3"><span>#</span><span>${sq(0)}${T(F+'chars.0.hn','','span','NAME')}</span><span>${sq(1)}${T(F+'chars.1.hn','','span','NAME')}</span></div>
-  <div class="rw r3"><span class="n">1.</span>${card(0)}${card(1)}</div>
+  ${photoRow()}
   <div class="drop"><div class="in">${spec}<button class="addb" data-a="addspec" style="margin:0 12px 10px;width:calc(100% - 24px)">+ ADD ROW</button></div></div></div></div>`,
   fx_guide:(no,i,tl)=>gHide?`<button class="addb" data-a="showguide" style="margin:0 0 14px">+ RESTORE PAIR GUIDE BLOCK</button>`:`<div class="blk fx${a(i+1)}">${tl}<div class="bd">${bandTxt(F+'bands.guide','PAIR GUIDE')}</div><div class="rws">${guide}</div><button class="addb" data-a="addguide">+ ADD SECTION</button></div>`
  };
@@ -536,6 +550,7 @@ app.addEventListener('click',e=>{
   else if(a==='showabout'){(S.hide=S.hide||{}).about=false}
   else if(a==='hideguide'){if(!confirm('Delete the PAIR GUIDE block? (you can restore it afterwards)'))return;(B.hide=B.hide||{}).guide=true}
   else if(a==='showguide'){(B.hide=B.hide||{}).guide=false}
+  else if(a==='pmode')B.photoMode=b.dataset.m;
   else if(a==='diag'){const k=DKEYS.indexOf(B.pair.diag);B.pair.diag=DKEYS[(k+1)%DKEYS.length]}
   else if(a==='ddmode')S.dday.mode=S.dday.mode==='until'?'since':'until';
   paint();return}

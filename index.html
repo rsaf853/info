@@ -351,7 +351,7 @@ const U=s=>String(s||'').toUpperCase();
 const PB=pg=>pg===3?S.p3:S;
 const PF=pg=>pg===3?'p3.':'';
 const HB=pg=>(pg===3?S.p3.hide:S.hide)||{};
-const HASH=['#/','#/pair','#/pair2'];
+const HASH=['#/','#/2008','#/1958'];
 const PM=['classic','split','one'],PMN={classic:'PHOTO + NAME',split:'TWO PHOTOS',one:'ONE PHOTO'};
 const bandTxt=(p,auto)=>live()?`<span data-p="${p}" contenteditable="true">${esc(getp(S,p)||auto||'')}</span>`:`<span>${esc(getp(S,p)||auto||'')}</span>`;
 
@@ -497,7 +497,11 @@ function paint(an=false){
  document.title=SITE_TITLE;
  try{$('#app').innerHTML=page===1?pageMe(an):pagePair(an,page)}finally{painting=false}
 }
-function route(){const h=location.hash;page=/^#\/pair2/.test(h)?3:/^#\/pair/.test(h)?2:1;paint(true);window.scrollTo(0,0)}
+function route(){const h=location.hash;
+ /* old addresses still work: #/pair → #/2008, #/pair2 → #/1958 */
+ if(/^#\/pair2/.test(h)){location.replace(HASH[2]);return}
+ if(/^#\/pair/.test(h)){location.replace(HASH[1]);return}
+ page=h.startsWith(HASH[2])?3:h.startsWith(HASH[1])?2:1;paint(true);window.scrollTo(0,0)}
 function flash(m,ms=2500){$('#ebm').textContent=m;clearTimeout(ft);ft=setTimeout(()=>$('#ebm').textContent='EDIT MODE',ms)}
 
 /* ---- load / save ---- */

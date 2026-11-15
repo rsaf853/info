@@ -166,6 +166,13 @@ label.av{cursor:pointer}
 .rw>.n .ctls .xb{margin:0;padding:0 4px;font-size:11px;line-height:16px}
 .xb:disabled{opacity:.3;cursor:default;pointer-events:none}
 .phl{margin-top:6px}.phl .v{font-size:12px}
+/* page 3 additions: notation line, dashed / ghost strokes, diagram switcher, editable footer link */
+.pt .m{margin-top:9px;padding-top:8px;border-top:1px solid var(--line);font:600 10.5px/1.6 var(--sans);letter-spacing:.01em;word-spacing:.12em;color:var(--fg);font-variant-numeric:tabular-nums;word-break:keep-all}
+.dg .dsh{stroke-dasharray:2.2 2;stroke-linecap:butt}
+.dg .gs{fill:none;stroke:var(--fg);stroke-width:1.2;stroke-dasharray:2 2;opacity:.55}
+.dgb{display:none;margin:8px 0 12px;font-size:9.5px}.edit:not(.prev) .dgb{display:inline-block}
+.nx.nxe{cursor:default;gap:6px}.nx.nxe:hover{background:none;color:inherit;padding-left:0;padding-right:0}
+.nxa{display:inline-grid;place-items:center;min-width:22px;height:20px;border:1px solid var(--fg);font-size:11px}.nxa:hover{background:var(--fg);color:var(--bg)}
 @media(min-width:760px){.L.pr .dg{width:112px;margin-bottom:16px}.pt .l{font-size:10px}.pt .t{font-size:21px}.pt .s{font-size:12px}}
 
 /* ---------- highlight styles (==text== is style 1; =={2}text== … =={6}text==) ---------- */
@@ -261,9 +268,19 @@ const DEF=()=>({
  avatar:'',
  dday:{label:'KGA',date:'2025-03-14',mode:'since',next:'NEXT'},
  bands:{about:'ABOUT',chars:'',guide:'PAIR GUIDE'},
- ui:{pair:'PAIR',me:'ME'},
+ ui:{pair:'PAIR',me:'ME',pair2:'PAIR 2'},
  about:[{k:'ACTIVE',v:'2025 ~'},{k:'LIKES',v:'chess, writing'},{k:'NOTE',v:'slow replies'}],
- pair:{code:'C33 — C39',title:"King's Gambit Accepted",sub:'Kieseritzky Gambit'},
+ pair:{code:'C33 — C39',title:"King's Gambit Accepted",sub:'Kieseritzky Gambit',mv:'',diag:'knight'},
+ /* page 3: second pair page, same structure as page 2 with its own data */
+ p3:{
+  pair:{code:'B90 — B99',title:'Sicilian Defence',sub:'Najdorf Variation',mv:'1.e4 c5 2.Nf3 d6 3.d4 cxd4 4.Nxd4 Nf6 5.Nc3 a6',diag:'a6'},
+  bands:{chars:'',guide:'PAIR GUIDE'},
+  chars:[{name:'Noah',hn:'Noah',side:'WHITE',photo:''},{name:'Dex',hn:'Dex',side:'BLACK',photo:''}],
+  hide:{},
+  spec:[{k:'AGE',v:['','']},{k:'HEIGHT',v:['','']},{k:'BIRTHDAY',v:['','']},{k:'RATING',v:['','']}],
+  guide:[{t:'Intro',b:'One quiet pawn move, and the whole board changes.'},{t:'Relation',b:'Write here.'},{t:'Notes',b:'- Write here.'}]
+ },
+ b3:[{t:'fx_chars',v:0},{t:'fx_guide',v:0}],
  chars:[{name:'Kai',hn:'Kai',side:'WHITE',photo:''},{name:'Ray',hn:'Ray',side:'BLACK',photo:''}],
  hide:{},
  spec:[{k:'AGE',v:['27','26']},{k:'HEIGHT',v:['184cm','178cm']},{k:'BIRTHDAY',v:['14.03','02.09']},{k:'RATING',v:['2712 GM','2604 IM']},{k:'LIKES',v:['whisky, rainy days','late snacks']}],
@@ -292,6 +309,20 @@ const ini=(n,f)=>(String(n||'').trim().charAt(0)||f).toUpperCase();
 const jumpSVG=(k,r)=>{let o='';for(let y=0;y<3;y++)for(let x=0;x<3;x++)if((x+y)%2)o+=`<rect class="sd" x="${x*20}" y="${y*20}" width="20" height="20"/>`;
  o+='<rect class="bx" x="0" y="0" width="60" height="60"/><rect class="bx" x="2" y="42" width="16" height="16"/><rect class="fgf" x="22" y="2" width="16" height="16"/><path class="ln" d="M10 40V10H19.6"/><path class="dot" d="M21 10l-4.2 -3v6z"/>';
  return `<svg viewBox="-2 -2 64 64">${o}<text class="tx" x="10" y="53.96">${esc(k)}</text><text class="tx w" x="30" y="13.96">${esc(r)}</text></svg>`};
+/* more diagrams in the same 3×3 language: outlined square = first character, filled square = second */
+const dBoard=()=>{let o='';for(let y=0;y<3;y++)for(let x=0;x<3;x++)if((x+y)%2)o+=`<rect class="sd" x="${x*20}" y="${y*20}" width="20" height="20"/>`;return o+'<rect class="bx" x="0" y="0" width="60" height="60"/>'};
+const dSq=(x,y,f,t)=>`<rect class="${f?'fgf':'bx'}" x="${x*20+2}" y="${y*20+2}" width="16" height="16"/><text class="tx${f?' w':''}" x="${x*20+10}" y="${y*20+13.96}">${esc(t)}</text>`;
+const DIAG={
+ knight:{n:"KNIGHT'S JUMP",f:jumpSVG},
+ /* Najdorf 5…a6: the a-pawn steps a7→a6 and takes b5 away (files a–c, ranks 7–5) */
+ a6:{n:'5…a6',f:(k,r)=>`<svg viewBox="-2 -2 64 64">${dBoard()}<rect class="gs" x="2" y="2" width="16" height="16"/><path class="ln" d="M10 6.5V16"/><path class="dot" d="M10 20.4l-3 -4.2h6z"/>${dSq(0,1,1,r)}${dSq(1,2,0,k)}<path class="ln dsh" d="M18.6 38.6L21.4 41.4"/></svg>`},
+ /* 1.e4 c5: the c-pawn eyes d4 instead of meeting e4 head-on (files c–e, ranks 5–3) */
+ c5:{n:'1.e4 c5',f:(k,r)=>`<svg viewBox="-2 -2 64 64">${dBoard()}${dSq(0,0,1,r)}<path class="ln dsh" d="M18.5 18.5L27 27"/><circle class="dot" cx="30" cy="30" r="3.2"/>${dSq(2,1,0,k)}</svg>`},
+ /* 4.Nxd4: the knight comes back from f3 to the centre (files d–f, ranks 4–2) — the page-2 jump, mirrored */
+ nxd4:{n:'4.Nxd4',f:(k,r)=>`<svg viewBox="-2 -2 64 64">${dBoard()}${dSq(2,1,0,k)}${dSq(0,0,1,r)}<path class="ln" d="M50 22V10H20.4"/><path class="dot" d="M19 10l4.2 -3v6z"/></svg>`}
+};
+const DKEYS=Object.keys(DIAG);
+const diagSVG=(key,k,r)=>(DIAG[key]||DIAG.knight).f(k,r);
 const photo=(p,label)=>{const u=getp(S,p),inner=u?`<img src="${esc(u)}" alt="" draggable="false">`:label;
  return live()?`<label class="av">${inner}<i></i><i></i><i></i><i></i><span class="upl">UPLOAD</span><input type="file" accept="image/*" hidden data-up="${p}"></label>`:`<div class="av">${inner}<i></i><i></i><i></i><i></i></div>`};
 /* dates are always DD.MM.YYYY on screen (stored as YYYY-MM-DD) */
@@ -307,7 +338,11 @@ function dday(){
   return{n:diff,pct:Math.round((diff-prev)/(next-prev)*100),sub:`<div class="dm"><span>${T('dday.next','','span','NEXT')} <b>${unit(next)}</b></span><span><b>${unit(next-diff)}</b> left</span></div>`}}
  return{n:Math.abs(diff),sub:''}}
 const U=s=>String(s||'').toUpperCase();
-const nm=i=>S.chars[i].name||'';
+/* pair pages: page 2 keeps its data at the top level (as before), page 3 lives under S.p3 */
+const PB=pg=>pg===3?S.p3:S;
+const PF=pg=>pg===3?'p3.':'';
+const HB=pg=>(pg===3?S.p3.hide:S.hide)||{};
+const HASH=['#/','#/pair','#/pair2'];
 const bandTxt=(p,auto)=>live()?`<span data-p="${p}" contenteditable="true">${esc(getp(S,p)||auto||'')}</span>`:`<span>${esc(getp(S,p)||auto||'')}</span>`;
 
 /* ---- pages ---- */
@@ -328,10 +363,10 @@ const BT={
  div:{n:'DIVIDER',d:'rules and space',v:['HAIRLINE','THICK','CHECKER','SPACE'],band:null,mk:()=>({})}
 };
 const noBand=b=>b.t==='image'&&!(b.v||0);
-const fxHidden=b=>!!(S.hide&&((b.t==='fx_about'&&S.hide.about)||(b.t==='fx_guide'&&S.hide.guide)));
+const fxHidden=(b,h)=>!!(h&&((b.t==='fx_about'&&h.about)||(b.t==='fx_guide'&&h.guide)));
 let FXR={};
 const fxTools=(pg,i,b,n)=>`<div class="bxtb ctl"><button type="button" data-bk="mv" ${bAttr(pg,i,' data-d="-1"')} title="Move up" ${i===0?'disabled':''}>↑</button><button type="button" data-bk="mv" ${bAttr(pg,i,' data-d="1"')} title="Move down" ${i===n-1?'disabled':''}>↓</button>${b.t==='fx_about'||b.t==='fx_guide'?`<i class="sp"></i><button type="button" data-a="${b.t==='fx_about'?'hideabout':'hideguide'}" title="Delete block">✕</button>`:''}</div>`;
-const bandCount=a=>(a||[]).filter(b=>BT[b.t]&&BT[b.t].band!==null&&!noBand(b)&&!fxHidden(b)).length;
+const bandCount=(a,h)=>(a||[]).filter(b=>BT[b.t]&&BT[b.t].band!==null&&!noBand(b)&&!fxHidden(b,h)).length;
 const BUI={pal:'',gear:'',tab:'d'};
 const imgPair=(u,uD)=>{const l=u||uD,k=uD||u;return l?`<img class="il" src="${esc(l)}" alt="" draggable="false"><img class="id" src="${esc(k)}" alt="" draggable="false">`:''};
 const bAttr=(pg,i,x='')=>`data-pg="${pg}" data-bi="${i}"${x}`;
@@ -357,7 +392,7 @@ function blockBody(pg,i,b){const P=`b${pg}.${i}.d.`,d=b.d||{},L=live(),v=b.v||0;
   const cap=(L||d.cap||d.sub)?`<div class="bx-cap"><div class="t">${T(P+'cap','','span','Caption')}</div><div class="s">${T(P+'sub','','span','Second line')}</div></div>`:'';
   return v===2?`<div class="bx-sp2">${box}${cap}</div>`:box+(v===1?cap:'')}
  case 'pair':{const one=k=>{const x=d[k]||{},sq=v===0;return`<div class="bx-pi"><div class="bx-im fr ${sq?'sq':''}" style="--h:180px;--mh:140px">${imgPair(x.src,x.srcD)||'<span class="bx-no">NO IMAGE</span>'}</div><div class="bx-pc">${T(P+k+'.cap','','span','Caption')}</div></div>`};return`<div class="bx-pair">${one('a')}${one('b')}</div>`}
- case 'chars':{const C=S.chars,sp=S.spec;return`<div class="bx-cp">${C.map((c,k)=>`<div>${c.photo?`<div class="av"><img src="${esc(c.photo)}" alt="" draggable="false"><i></i><i></i><i></i><i></i></div>`:`<div class="av">${esc(c.ph||'PHOTO')}<i></i><i></i><i></i><i></i></div>`}<div class="pn">${esc(c.name||'')}</div><div class="pt"><i class="mkq${k?' k':''}"></i>${esc(c.side||'')}</div></div>`).join('')}</div><div class="bx-cmp"><div class="hd2"><span></span><span>${esc(String(C[0].name||'').toUpperCase())}</span><span>${esc(String(C[1].name||'').toUpperCase())}</span></div>${sp.map(r=>`<div class="cr"><dt>${esc(r.k)}</dt><dd>${esc((r.v||[])[0]||'')}</dd><dd>${esc((r.v||[])[1]||'')}</dd></div>`).join('')}</div>${L?'<p class="bxhint">Shows the two characters from page 2. Edit them there.</p>':''}`}
+ case 'chars':{const C=PB(pg).chars,sp=PB(pg).spec;return`<div class="bx-cp">${C.map((c,k)=>`<div>${c.photo?`<div class="av"><img src="${esc(c.photo)}" alt="" draggable="false"><i></i><i></i><i></i><i></i></div>`:`<div class="av">${esc(c.ph||'PHOTO')}<i></i><i></i><i></i><i></i></div>`}<div class="pn">${esc(c.name||'')}</div><div class="pt"><i class="mkq${k?' k':''}"></i>${esc(c.side||'')}</div></div>`).join('')}</div><div class="bx-cmp"><div class="hd2"><span></span><span>${esc(String(C[0].name||'').toUpperCase())}</span><span>${esc(String(C[1].name||'').toUpperCase())}</span></div>${sp.map(r=>`<div class="cr"><dt>${esc(r.k)}</dt><dd>${esc((r.v||[])[0]||'')}</dd><dd>${esc((r.v||[])[1]||'')}</dd></div>`).join('')}</div>${L?`<p class="bxhint">Shows the two characters from page ${pg===3?3:2}. Edit them there.</p>`:''}`}
  case 'div':return v===0?'<hr class="bx-d1">':v===1?'<hr class="bx-d2">':v===2?'<div class="bx-d3"></div>':'<div class="bx-d4"></div>';
  }return''}
 function blockSettings(pg,i,b){const d=b.d,tab=BUI.tab,m=tab==='m',fx=m?(d.mfx??d.fx??50):(d.fx??50),fy=m?(d.mfy??d.fy??50):(d.fy??50),pic=d.src||d.srcD,hv=m?(d.mh||d.h||200):(d.h||260);
@@ -375,7 +410,7 @@ function blocksHtml(pg,start,an){const arr=S['b'+pg]||[];let n=start,h='';
  const add=i=>live()?`<div class="bxadd ctl"><button type="button" data-bk="add" ${bAttr(pg,i)}>+ ADD BLOCK</button></div>${BUI.pal===pg+':'+i?`<div class="bxpal ctl"><div class="gr">${Object.entries(BT).filter(([k,R])=>!R.fx).map(([k,R])=>`<button type="button" data-bk="new" data-t="${k}" ${bAttr(pg,i)}><b>${R.n}</b><small>${R.d}</small></button>`).join('')}</div></div>`:''}`:'';
  h+=add(0);
  arr.forEach((b,i)=>{const R=BT[b.t];
-  if(R.fx){h+=FXR[b.t](n,i,fxTools(pg,i,b,arr.length));if(!fxHidden(b))n++;h+=add(i+1);return}
+  if(R.fx){h+=FXR[b.t](n,i,fxTools(pg,i,b,arr.length));if(!fxHidden(b,HB(pg)))n++;h+=add(i+1);return}
   const body=blockBody(pg,i,b),tools=blockTools(pg,i,b,arr.length);
   if(R.band===null)h+=`<div class="bxd blkx">${tools}${body}</div>`;
   else{const gear=BUI.gear===pg+':'+i&&(b.t==='image'||b.t==='pair')?(b.t==='image'?blockSettings(pg,i,b):pairSettings(pg,i,b)):'';
@@ -397,34 +432,44 @@ function pageMe(an){
  return `<div class="W p1"><aside class="L${a(0)}"><div class="id">${photo('avatar','PHOTO')}<div>${T('name','nm','h1')}${T('handle','hdl','div')}</div></div>${MDF('bio','bio')}</aside>
  <section class="Rt">${blocksHtml(1,1,an)}</section>
  ${foot(an,1)}</div>`}
-function titleBlock(){
- const P=S.pair,L=live();
- const part=(p,cls,tag,ph)=>L||P[p.split('.')[1]]?T(p,cls,tag,ph):'';
- const code=part('pair.code','l','div','CODE'),title=part('pair.title','t','div','Title');
- const sb=(L||P.sub)?T('pair.sub','s','div','Subtitle'):'';
- return `${code}${title}${sb}`}
-function pagePair(an){
- const gHide=!!(S.hide&&S.hide.guide);
+function titleBlock(F,P){
+ const L=live();
+ const part=(k,cls,ph)=>L||P[k]?T(F+'pair.'+k,cls,'div',ph):'';
+ /* notation: each "5.Nc3 a6" pair stays on one line when it wraps */
+ const mvs=L?part('mv','m','1.e4 …'):P.mv?`<div class="m">${esc(P.mv).split(/\s+(?=\d+\.)/).map(x=>`<span style="white-space:nowrap">${x}</span>`).join(' ')}</div>`:'';
+ return part('code','l','CODE')+part('title','t','Title')+part('sub','s','Subtitle')+mvs}
+function pagePair(an,pg){
+ const B=PB(pg),F=PF(pg);
+ const gHide=!!(B.hide&&B.hide.guide);
  const a=i=>an?` a" style="--i:${i}`:'"';
  const mv=(k,i,n)=>live()?`<br><span class="ctls ctl"><button type="button" class="xb" data-a="mv${k}" data-i="${i}" data-d="-1" aria-label="move up"${i===0?' disabled':''}>↑</button><button type="button" class="xb" data-a="mv${k}" data-i="${i}" data-d="1" aria-label="move down"${i===n-1?' disabled':''}>↓</button><button type="button" class="xb" data-a="rm${k}" data-i="${i}" aria-label="delete">×</button></span>`:'';
- const c0=nm(0),c1=nm(1),auto=`${U(c0)} & ${U(c1)} · CHARACTERS`;
- const spec=S.spec.map((r,i)=>`<div class="rw r3 sp3" style="--i:${i}"><span class="n">${i+2}.${mv('spec',i,S.spec.length)}</span><div class="c"><span class="k"${live()?' contenteditable="true"':''} data-p="spec.${i}.k">${esc(r.k)}</span>${MDF(`spec.${i}.v.0`,'v',true)}</div><div class="c"><span class="k">${esc(r.k)}</span>${MDF(`spec.${i}.v.1`,'v',true)}</div></div>`).join('');
- const guide=S.guide.map((g,i)=>`<div class="rw"><span class="n">${i+1}.${mv('guide',i,S.guide.length)}</span><div class="c">${T(`guide.${i}.t`,'gh','h3','Title')}${MDF(`guide.${i}.b`,'gp')}</div></div>`).join('');
+ const c0=B.chars[0].name||'',c1=B.chars[1].name||'',auto=`${U(c0)} & ${U(c1)} · CHARACTERS`;
+ const spec=B.spec.map((r,i)=>`<div class="rw r3 sp3" style="--i:${i}"><span class="n">${i+2}.${mv('spec',i,B.spec.length)}</span><div class="c"><span class="k"${live()?' contenteditable="true"':''} data-p="${F}spec.${i}.k">${esc(r.k)}</span>${MDF(`${F}spec.${i}.v.0`,'v',true)}</div><div class="c"><span class="k">${esc(r.k)}</span>${MDF(`${F}spec.${i}.v.1`,'v',true)}</div></div>`).join('');
+ const guide=B.guide.map((g,i)=>`<div class="rw"><span class="n">${i+1}.${mv('guide',i,B.guide.length)}</span><div class="c">${T(`${F}guide.${i}.t`,'gh','h3','Title')}${MDF(`${F}guide.${i}.b`,'gp')}</div></div>`).join('');
+ const card=k=>`<div class="c pc">${photo(`${F}chars.${k}.photo`,esc(B.chars[k].ph||'PHOTO'))}<div class="pn">${T(`${F}chars.${k}.name`,'')}</div>${live()?`<div class="phl"><span class="k">PHOTO TEXT</span>${T(`${F}chars.${k}.ph`,'v','div','PHOTO')}</div>`:''}</div>`;
  FXR={
-  fx_chars:(no,i,tl)=>`<div class="blk rv fx${a(i+1)}" data-pin>${tl}<div class="bd">${bandTxt('bands.chars',auto)}<span class="no"><span class="pin-mark">PINNED · </span>MOVE ${no}</span></div><div class="rws">
-  <div class="hd3"><span>#</span><span>${sq(0)}${T('chars.0.hn','','span','NAME')}</span><span>${sq(1)}${T('chars.1.hn','','span','NAME')}</span></div>
-  <div class="rw r3"><span class="n">1.</span><div class="c pc">${photo('chars.0.photo',esc(S.chars[0].ph||'PHOTO'))}<div class="pn">${T('chars.0.name','')}</div>${live()?`<div class="phl"><span class="k">PHOTO TEXT</span>${T('chars.0.ph','v','div','PHOTO')}</div>`:''}</div><div class="c pc">${photo('chars.1.photo',esc(S.chars[1].ph||'PHOTO'))}<div class="pn">${T('chars.1.name','')}</div>${live()?`<div class="phl"><span class="k">PHOTO TEXT</span>${T('chars.1.ph','v','div','PHOTO')}</div>`:''}</div></div>
+  fx_chars:(no,i,tl)=>`<div class="blk rv fx${a(i+1)}" data-pin>${tl}<div class="bd">${bandTxt(F+'bands.chars',auto)}<span class="no"><span class="pin-mark">PINNED · </span>MOVE ${no}</span></div><div class="rws">
+  <div class="hd3"><span>#</span><span>${sq(0)}${T(F+'chars.0.hn','','span','NAME')}</span><span>${sq(1)}${T(F+'chars.1.hn','','span','NAME')}</span></div>
+  <div class="rw r3"><span class="n">1.</span>${card(0)}${card(1)}</div>
   <div class="drop"><div class="in">${spec}<button class="addb" data-a="addspec" style="margin:0 12px 10px;width:calc(100% - 24px)">+ ADD ROW</button></div></div></div></div>`,
-  fx_guide:(no,i,tl)=>gHide?`<button class="addb" data-a="showguide" style="margin:0 0 14px">+ RESTORE PAIR GUIDE BLOCK</button>`:`<div class="blk fx${a(i+1)}">${tl}<div class="bd">${bandTxt('bands.guide','PAIR GUIDE')}<span class="no">MOVE ${no}</span></div><div class="rws">${guide}</div><button class="addb" data-a="addguide">+ ADD SECTION</button></div>`
+  fx_guide:(no,i,tl)=>gHide?`<button class="addb" data-a="showguide" style="margin:0 0 14px">+ RESTORE PAIR GUIDE BLOCK</button>`:`<div class="blk fx${a(i+1)}">${tl}<div class="bd">${bandTxt(F+'bands.guide','PAIR GUIDE')}<span class="no">MOVE ${no}</span></div><div class="rws">${guide}</div><button class="addb" data-a="addguide">+ ADD SECTION</button></div>`
  };
- return `<div class="W"><aside class="L pr${a(0)}"><div class="dg" role="img" aria-label="knight's jump diagram">${jumpSVG(ini(c0,'K'),ini(c1,'R'))}</div><div class="pt">${titleBlock()}</div></aside>
- <section class="Rt">${blocksHtml(2,1+bandCount(S.b1),an)}</section>
- ${foot(an,2)}</div>`}
+ const dk=DIAG[B.pair.diag]?B.pair.diag:'knight';
+ const dgc=live()?`<button type="button" class="xb dgb ctl" data-a="diag" title="Change diagram">◇ ${esc(DIAG[dk].n)} · ${DKEYS.indexOf(dk)+1}/${DKEYS.length}</button>`:'';
+ const start=1+bandCount(S.b1,S.hide)+(pg===3?bandCount(S.b2,S.hide):0);
+ return `<div class="W"><aside class="L pr${a(0)}"><div class="dg" role="img" aria-label="${esc(DIAG[dk].n)} diagram">${diagSVG(dk,ini(c0,'K'),ini(c1,'R'))}</div>${dgc}<div class="pt">${titleBlock(F,B.pair)}</div></aside>
+ <section class="Rt">${blocksHtml(pg,start,an)}</section>
+ ${foot(an,pg)}</div>`}
+/* footer link. In edit mode the label is editable text and only the arrow is a link,
+   so clicking the label to rename it no longer jumps to the next page. */
+const navLink=(to,key,def,dir)=>{const href=HASH[to-1],arr=dir<0?'←':'→';
+ if(live())return`<span class="nx nxe">${dir<0?`<a class="nxa" href="${href}" aria-label="go">${arr}</a>`:''}${T('ui.'+key,'','span',def)}${dir>0?`<a class="nxa" href="${href}" aria-label="go">${arr}</a>`:''}</span>`;
+ return`<a class="nx" href="${href}">${dir<0?`<span>${arr}</span> `:''}${esc(S.ui[key]||def)}${dir>0?` <span>${arr}</span>`:''}</a>`};
 function foot(an,n){
  const a=an?` a" style="--i:6`:'';
- const nav=n===1?`<a class="nx" href="#/pair">${live()?T('ui.pair','','span','PAIR'):esc(S.ui.pair||'PAIR')} <span>→</span></a>`:`<a class="nx" href="#/"><span>←</span> ${live()?T('ui.me','','span','ME'):esc(S.ui.me||'ME')}</a>`;
  const lg=`<span><button class="lg" id="lg" aria-label="login">#</button></span>`;
- const row=n===1?lg+nav:nav+lg;
+ const toMe=navLink(1,'me','ME',-1),toPair=d=>navLink(2,'pair','PAIR',d),toPair2=navLink(3,'pair2','PAIR 2',1);
+ const row=n===1?lg+toPair(1):n===2?toMe+lg+toPair2:toPair(-1)+lg;
  return `<footer class="ft${a}">${row}</footer><div class="lgf${lgOpen&&!logged?' on':''}" id="lgf"><form class="ug" id="uf" autocomplete="off"><input type="email" placeholder="email" aria-label="email"><input type="password" placeholder="password" aria-label="password"><button aria-label="login">→</button></form><p class="er" id="er">${esc(lgErr)}</p></div>`}
 let painting=false;
 function paint(an=false){
@@ -432,9 +477,9 @@ function paint(an=false){
  document.body.classList.toggle('edit',editing);document.body.classList.toggle('prev',editing&&preview);
  $('#pv').classList.toggle('on',preview);
  document.title=SITE_TITLE;
- try{$('#app').innerHTML=page===1?pageMe(an):pagePair(an)}finally{painting=false}
+ try{$('#app').innerHTML=page===1?pageMe(an):pagePair(an,page)}finally{painting=false}
 }
-function route(){page=/^#\/pair/.test(location.hash)?2:1;paint(true);window.scrollTo(0,0)}
+function route(){const h=location.hash;page=/^#\/pair2/.test(h)?3:/^#\/pair/.test(h)?2:1;paint(true);window.scrollTo(0,0)}
 function flash(m,ms=2500){$('#ebm').textContent=m;clearTimeout(ft);ft=setTimeout(()=>$('#ebm').textContent='EDIT MODE',ms)}
 
 /* ---- load / save ---- */
@@ -442,7 +487,10 @@ const upgrade=d=>{
  const D0=DEF(),o={...D0,...d};
  o.b1=Array.isArray(d.b1)?d.b1.filter(b=>b&&BT[b.t]):[];o.b2=Array.isArray(d.b2)?d.b2.filter(b=>b&&BT[b.t]):[];
  const fxm=(arr,ts)=>{const have=new Set(arr.map(b=>b.t));return[...ts.filter(t=>!have.has(t)).map(t=>({t,v:0})),...arr]};
- o.b1=fxm(o.b1,['fx_dday','fx_about']);o.b2=fxm(o.b2,['fx_chars','fx_guide']);
+ o.b3=Array.isArray(d.b3)?d.b3.filter(b=>b&&BT[b.t]):[];
+ o.b1=fxm(o.b1,['fx_dday','fx_about']);o.b2=fxm(o.b2,['fx_chars','fx_guide']);o.b3=fxm(o.b3,['fx_chars','fx_guide']);
+ {const p=d.p3||{},Q=D0.p3;o.p3={...Q,...p,pair:{...Q.pair,...(p.pair||{})},bands:{...Q.bands,...(p.bands||{})},hide:{...(p.hide||{})},
+  chars:[0,1].map(i=>({...Q.chars[i],...((p.chars||[])[i]||{})})),spec:Array.isArray(p.spec)?p.spec:Q.spec,guide:Array.isArray(p.guide)?p.guide:Q.guide}}
  o.pair={...D0.pair,...(d.pair||{})};
  if(o.pair.subCode){const sc=String(o.pair.subCode).trim(),cd=String(o.pair.code||'').trim();o.pair.code=cd?(cd.includes(sc)?cd:cd+' — '+sc):sc}
  delete o.pair.subCode;o.dday={...D0.dday,...(d.dday||{})};o.bands={...D0.bands,...(d.bands||{})};o.ui={...D0.ui,...(d.ui||{})};
@@ -476,18 +524,19 @@ app.addEventListener('click',e=>{
   if(logged){editing=!editing;if(!editing)preview=false;paint();return}
   lgOpen=!lgOpen;paint();if(lgOpen){const i=$('#lgf input');i&&i.focus()}return}
  const b=e.target.closest('[data-a]');
- if(b){const a=b.dataset.a,i=+b.dataset.i;
+ if(b){const a=b.dataset.a,i=+b.dataset.i,B=PB(page);
   if(a==='addabout')S.about.push({k:'KEY',v:'value'});
   else if(a==='rmabout')S.about.splice(i,1);
-  else if(a==='mvabout'||a==='mvspec'||a==='mvguide'){const arr=a==='mvabout'?S.about:a==='mvspec'?S.spec:S.guide,j=i+(+b.dataset.d);if(j>=0&&j<arr.length)[arr[i],arr[j]]=[arr[j],arr[i]]}
-  else if(a==='addspec')S.spec.push({k:'KEY',v:['','']});
-  else if(a==='rmspec')S.spec.splice(i,1);
-  else if(a==='addguide')S.guide.push({t:'Title',b:'Text'});
-  else if(a==='rmguide')S.guide.splice(i,1);
+  else if(a==='mvabout'||a==='mvspec'||a==='mvguide'){const arr=a==='mvabout'?S.about:a==='mvspec'?B.spec:B.guide,j=i+(+b.dataset.d);if(j>=0&&j<arr.length)[arr[i],arr[j]]=[arr[j],arr[i]]}
+  else if(a==='addspec')B.spec.push({k:'KEY',v:['','']});
+  else if(a==='rmspec')B.spec.splice(i,1);
+  else if(a==='addguide')B.guide.push({t:'Title',b:'Text'});
+  else if(a==='rmguide')B.guide.splice(i,1);
   else if(a==='hideabout'){if(!confirm('Delete the ABOUT block? (you can restore it afterwards)'))return;(S.hide=S.hide||{}).about=true}
   else if(a==='showabout'){(S.hide=S.hide||{}).about=false}
-  else if(a==='hideguide'){if(!confirm('Delete the PAIR GUIDE block? (you can restore it afterwards)'))return;(S.hide=S.hide||{}).guide=true}
-  else if(a==='showguide'){(S.hide=S.hide||{}).guide=false}
+  else if(a==='hideguide'){if(!confirm('Delete the PAIR GUIDE block? (you can restore it afterwards)'))return;(B.hide=B.hide||{}).guide=true}
+  else if(a==='showguide'){(B.hide=B.hide||{}).guide=false}
+  else if(a==='diag'){const k=DKEYS.indexOf(B.pair.diag);B.pair.diag=DKEYS[(k+1)%DKEYS.length]}
   else if(a==='ddmode')S.dday.mode=S.dday.mode==='until'?'since':'until';
   paint();return}
  if(live())return;
@@ -499,7 +548,7 @@ app.addEventListener('input',e=>{
 });
 app.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.isContentEditable&&!e.target.dataset.md){e.preventDefault();e.target.blur()}});
 app.addEventListener('paste',e=>{if(e.target.isContentEditable){e.preventDefault();const raw=e.clipboardData.getData('text')||'';document.execCommand('insertText',false,e.target.dataset.md?raw:raw.replace(/\s*\n+\s*/g,' '))}});
-app.addEventListener('focusout',e=>{const p=e.target.dataset&&e.target.dataset.p;if(e.target.isContentEditable&&live()&&(p==='name'||p==='chars.0.name'||p==='chars.1.name'||p==='dday.label'))setTimeout(()=>{if(live())paint()},0)});
+app.addEventListener('focusout',e=>{const p=e.target.dataset&&e.target.dataset.p;if(e.target.isContentEditable&&live()&&(p==='name'||p==='dday.label'||/^(p3\.)?chars\.[01]\.name$/.test(p||'')))setTimeout(()=>{if(live())paint()},0)});
 app.addEventListener('submit',async e=>{
  e.preventDefault();
  const [m,p]=[...e.target.querySelectorAll('input')],er=$('#er');
@@ -545,8 +594,8 @@ window.addEventListener('hashchange',route);
   if(!ok)return;ok=false;
   const t=e.changedTouches[0],dx=t.clientX-x0,dy=t.clientY-y0;
   if(Date.now()-t0>700||Math.abs(dx)<60||Math.abs(dx)<Math.abs(dy)*1.5)return;
-  if(dx<0&&page===1)location.hash='#/pair';
-  else if(dx>0&&page===2)location.hash='#/';
+  if(dx<0&&page<3)location.hash=HASH[page];
+  else if(dx>0&&page>1)location.hash=HASH[page-2];
  },{passive:true});
 })();
 

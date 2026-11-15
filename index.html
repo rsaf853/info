@@ -115,8 +115,16 @@ label.av{cursor:pointer}
 
 /* footer */
 .ft{display:flex;justify-content:space-between;align-items:center;padding:0 4px;margin-top:0}
-.nx{display:inline-flex;align-items:center;gap:8px;padding:11px 0;font:600 10px var(--sans);letter-spacing:.12em;cursor:pointer;text-transform:uppercase;transition:padding .25s cubic-bezier(.3,.8,.2,1),background .18s,color .18s}
-.nx:hover{background:var(--fg);color:var(--bg);padding-left:12px;padding-right:12px}
+.nx{display:inline-flex;align-items:center;gap:8px;padding:11px 0;font:600 10px var(--sans);letter-spacing:.12em;cursor:pointer;text-transform:uppercase;gap:10px}
+/* hover: the arrow's tail stretches out (no inverted box) */
+.nx .ln{display:inline-flex;align-items:center;height:10px}
+.nx .tail{display:block;width:9px;height:1.2px;background:currentColor;transition:width .45s cubic-bezier(.3,.8,.2,1)}
+.nx .head{display:block;width:6px;height:6px;border:solid currentColor;border-width:1.2px 1.2px 0 0;flex:none}
+.nx .ln.r .head{transform:rotate(45deg);margin-left:-5.6px}
+.nx .ln.l .head{transform:rotate(-135deg);margin-right:-5.6px}
+.nx .ln{transition:margin .45s cubic-bezier(.3,.8,.2,1)}
+.nx:hover .tail,.nx:focus-visible .tail{width:28px}
+.nx:hover .ln.r,.nx:focus-visible .ln.r{margin-right:-19px}.nx:hover .ln.l,.nx:focus-visible .ln.l{margin-left:-19px}
 .lg{border:0;background:none;padding:6px;margin:-6px;font:500 11px var(--sans);letter-spacing:0;color:var(--fg);opacity:.14;cursor:pointer;transition:opacity .2s}.lg:hover,.lg:focus-visible{opacity:.5}
 .lgf{display:none;margin:18px 0 0}.lgf.on{display:block}
 .ug{display:flex;border:1px solid var(--fg);background:var(--bg)}
@@ -482,7 +490,8 @@ function pagePair(an,pg){
    so clicking the label to rename it no longer jumps to the next page. */
 const navLink=(to,key,def,dir)=>{const href=HASH[to-1],arr=dir<0?'←':'→';
  if(live())return`<span class="nx nxe">${dir<0?`<a class="nxa" href="${href}" aria-label="go">${arr}</a>`:''}${T('ui.'+key,'','span',def)}${dir>0?`<a class="nxa" href="${href}" aria-label="go">${arr}</a>`:''}</span>`;
- return`<a class="nx" href="${href}">${dir<0?`<span>${arr}</span> `:''}${esc(S.ui[key]||def)}${dir>0?` <span>${arr}</span>`:''}</a>`};
+ const ln=dir<0?'<span class="ln l" aria-hidden="true"><span class="head"></span><span class="tail"></span></span>':'<span class="ln r" aria-hidden="true"><span class="tail"></span><span class="head"></span></span>';
+ return`<a class="nx" href="${href}">${dir<0?ln:''}${esc(S.ui[key]||def)}${dir>0?ln:''}</a>`};
 function foot(an,n){
  const a=an?` a" style="--i:6`:'';
  const lg=`<span><button class="lg" id="lg" aria-label="login">#</button></span>`;
